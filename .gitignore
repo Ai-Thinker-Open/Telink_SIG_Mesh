@@ -1,0 +1,3 @@
+.vscode
+examples/*/out
+components/vendor/tmesh*

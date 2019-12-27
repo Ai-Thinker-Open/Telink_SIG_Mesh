@@ -1,0 +1,48 @@
+#record sdk version
+SDK_VERSION=0.2
+echo "Telink BLE SDK_VERSION = $SDK_VERSION" > ./sdk_version.txt
+
+dir_release=../../SIG_MESH_Release_20171129_V1.Z_Beta
+sdk_dir=$dir_release/sdk
+tools_dir=$dir_release/tools
+release_bin=$dir_release/release_bin
+
+rm -rf $dir_release
+mkdir $dir_release
+mkdir $sdk_dir
+mkdir $tools_dir
+mkdir $tools_dir/telink-ble-phone
+
+cp -rf ../reference/tl_bulk/Release/sig_mesh_tool.exe $tools_dir/telink-ble-phone
+cp -rf ../reference/tl_bulk/sig_mesh_master.ini $tools_dir/telink-ble-phone
+cp -rf ../reference/tl_bulk/tl_node_gateway.ini $tools_dir/telink-ble-phone
+cp -rf ./sig_mesh_master_dongle_8267_69/sig_mesh_master_dongle_8267_69.bin $tools_dir/telink-ble-phone
+
+
+cp -rf proj proj_lib vendor boot drivers $sdk_dir
+cp * .project .cproject $sdk_dir
+find $sdk_dir/proj_lib -name *.c |xargs rm -rf
+find $sdk_dir -name *.zip |xargs rm -rf
+find $sdk_dir -name *.rar |xargs rm -rf
+rm -rf $sdk_dir/release_mesh.sh
+rm -rf $sdk_dir/vendor/common/mijia_ble_api_master/ble_encrypt
+
+cp lib_sig_mesh/libsig_mesh.a	$sdk_dir/proj_lib
+cp lib_sig_mesh_LPN/libsig_mesh_LPN.a	$sdk_dir/proj_lib
+cp lib_sig_mesh_prov/libsig_mesh_prov.a	$sdk_dir/proj_lib
+
+rm -rf $sdk_dir/*.IAB
+rm -rf $sdk_dir/*.IAD
+rm -rf $sdk_dir/*.IMB
+rm -rf $sdk_dir/*.IMD
+rm -rf $sdk_dir/*.PFI
+rm -rf $sdk_dir/*.PO
+rm -rf $sdk_dir/*.PR
+rm -rf $sdk_dir/*.PRI
+rm -rf $sdk_dir/*.PS
+rm -rf $sdk_dir/*.SearchResults
+rm -rf $sdk_dir/*.WK3
+
+
+pause
+::exit

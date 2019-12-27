@@ -1,0 +1,52 @@
+Porject : 8267_beacon
+
+Date: 2016-05-10,  Author : Kidd 
+Minor issues/ TODO :
+1 power consumption tuning, include deepsleep current		
+2 merge detector project from other SDK into ble_lt
+
+
+============================================================================
+============================================================================
+
+Porject : KT
+Date: 2015-09-09,  Author : Kidd 
+1 fix battery detect value read time out
+2 change battery value report to 100% percentage, 2.01V --> 1%(100mv) , 2.xx V --> xx% , 3.00V ¤Î¥H¤W--> 100%(10000mv)
+3 fix error battery value when  continously read value  
+    
+    
+    
+============================================================================
+Date: 2015-09-19,  Author : Sihui
+1 improve pair / unpair stabilty 
+2 change pair/unpair control :
+  press "home" key to pair , when RC / Dongle 1st time pairing
+  press "home" + "down" key  3 seconds, to unpair
+  press "home" + "ok" key  3 seconds, to re-lanuach pairing , when RC/Dongle under disconnected mode(not paired) 
+  press "home" + "shopping" key  3 seconds, to restore defeult
+  
+  
+============================================================================
+Date: 2015-11-24,  Author : Kidd
+1 update ADC driver with VCC direct in mode
+2 correct error retrieved battery value
+3 fix link loss issue after deepsleep when using PC tool to issue commands
+4 add 1.9V low battery sleep function   
+5 add 2.1V 2.0V low battery indicating led blinking
+6 other minot fixs    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+============================================================================
+Date: 2015-xx-xx,  Author : xxxx 
+1 example
+    
+    
