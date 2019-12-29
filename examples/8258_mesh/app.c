@@ -57,6 +57,8 @@
 
 #pragma message(PRINT_MARCO(MESH_USER_DEFINE_MODE))
 #pragma message(PRINT_MARCO(FACTORY_COUNT))
+#pragma message(PRINT_MARCO(PWM_R))
+#pragma message(PRINT_MARCO(PWM_G))
 
 MYFIFO_INIT(blt_rxfifo, 64, 16);
 MYFIFO_INIT(blt_txfifo, 40, 32);
