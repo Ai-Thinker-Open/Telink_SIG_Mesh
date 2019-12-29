@@ -25,7 +25,8 @@ SECTIONS
     . = (((. + 3) / 4)*4);
         PROVIDE(_rstored_ = . );
         
-        
+    . = 0x4000;
+
     PROVIDE(_ramcode_size_ = . );
 	PROVIDE(_ramcode_size_div_16_ = (. + 15 ) / 16);
 	PROVIDE(_ramcode_size_div_256_ = (. + 255) / 256);
