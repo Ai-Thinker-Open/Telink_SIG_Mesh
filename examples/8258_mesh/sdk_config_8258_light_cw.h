@@ -5,13 +5,19 @@
 #define __PRINT_MACRO(x) #x
 #define PRINT_MARCO(x) #x"=" __PRINT_MACRO(x)
 
+#include "sdk_config_xxxx.h"
+
 /**************************************
  * 配置LED暖光灯的引脚
  * 可能值： GPIO_PB0
  *         GPIO_PB1
  * 默认值： GPIO_PB0
  * ***********************************/
-#define PWM_R       GPIO_PB0		
+#if (C_BRIGHT == 0)
+    #define PWM_R       GPIO_PB0
+#else
+    #define PWM_R       GPIO_PB1
+#endif
 
 
 
@@ -21,8 +27,11 @@
  *         GPIO_PB1
  * 默认值： GPIO_PB1
  * ***********************************/
-#define PWM_G       GPIO_PB1		//green
-
+#if (W_CCT == 0)
+    #define PWM_G       GPIO_PB0
+#else
+    #define PWM_G       GPIO_PB1
+#endif
 
 
 /**************************************
@@ -30,7 +39,7 @@
  * 可能值：快速开关(0-3S)5次，10次，15次
  * 默认值：5次
  * ***********************************/
-#define FACTORY_COUNT  8
+#define FACTORY_COUNT  FACTORY_RESTORE
 
 
 
