@@ -113,15 +113,18 @@ pre-build:
 	-@echo ' '
 
 flash:
-	python3 $(TEL_PATH)/make/Telink_Tools.py -p /dev/ttyUSB0 burn $(BIN_FILE) 
+	python3 $(TEL_PATH)/make/Telink_Tools.py -p $(DOWNLOAD_PORT) burn $(BIN_FILE) 
 
-erase:
-	tcdb wf 0 -s 64k -e
+erase_fw:
+	python3 $(TEL_PATH)/make/Telink_Tools.py -p $(DOWNLOAD_PORT) erase_flash 0x4000 44
+
+erase_key:
+	python3 $(TEL_PATH)/make/Telink_Tools.py -p $(DOWNLOAD_PORT) erase_flash 0x30000 16
 
 monitor:
-	python3 $(TEL_PATH)/make/monitor.py --port /dev/ttyUSB0 --baud 115200 $(ELF_FILE)
+	python3 $(TEL_PATH)/make/monitor.py --port $(DOWNLOAD_PORT) --baud 115200 $(ELF_FILE)
 
 secondary-outputs: $(BIN_FILE) $(LST_FILE) $(SIZEDUMMY)
 
-.PHONY: all clean dependents flash erase monitor pre-build 
+.PHONY: all clean dependents flash erase_fw erase_key monitor pre-build 
 .SECONDARY: main-build 

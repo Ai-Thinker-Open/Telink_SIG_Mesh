@@ -81,4 +81,6 @@ RX|TX|
     make flash
 其他指令：
 
+    make erase_fw //擦除固件
+    make erase_key //擦除Mesh相关数据
     make monitor //打开串口监控
