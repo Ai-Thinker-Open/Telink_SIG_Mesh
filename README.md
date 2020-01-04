@@ -84,3 +84,4 @@ RX|TX|
     make erase_fw //擦除固件
     make erase_key //擦除Mesh相关数据
     make monitor //打开串口监控
+    python3 ../../make/Telink_Tools.py -p /dev/ttyUSB0 burn_triad 1345 78da07fa44a7 221746e805ac0e6269bd4d3e55f1145c //烧录三元组

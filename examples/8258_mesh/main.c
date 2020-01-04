@@ -209,6 +209,7 @@ _attribute_ram_code_ int main (void)    //must run in ramcode
 		user_init();
 	}
 
+	my_printf("hello mesh\r\n");
 
     irq_enable();
 

@@ -185,8 +185,8 @@ extern "C" {
 //---------------  LED / PWM
 #include "sdk_config_8258_light_cw.h"
 
-#define PWM_B       GPIO_PC4		//blue
-#define PWM_W       GPIO_PC6		//white
+#define PWM_B       GPIO_PC2		//blue
+#define PWM_W       GPIO_PB7		//white
 
 #define PWM_FUNC_R  AS_PWM  // AS_PWM_SECOND
 #define PWM_FUNC_G  AS_PWM  // AS_PWM_SECOND
@@ -233,7 +233,12 @@ extern "C" {
 #define WATCHDOG_INIT_TIMEOUT		2000  //in mi mode the watchdog timeout is 20s
 #endif
 
-
+///////////////////////debug printf///////////////
+#define UART_PRINT_DEBUG_ENABLE 1
+#define PRINT_BAUD_RATE 500000
+#define DEBUG_INFO_TX_PIN GPIO_PB1
+#define PB1_OUTPUT_ENABLE	1
+#define PULL_WAKEUP_SRC_PB1 PM_PIN_PULLUP_1M
 
 /////////////////// set default   ////////////////
 
