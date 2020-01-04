@@ -187,6 +187,7 @@ _attribute_ram_code_ int main (void)    //must run in ramcode
 	rf_drv_init(RF_MODE_BLE_1M);
 
 	gpio_init( !deepRetWakeUp );  //analog resistance will keep available in deepSleep mode, so no need initialize again
+	my_printf_uart("   \r\nhello mesh\r\n");
 
 #if (CLOCK_SYS_CLOCK_HZ == 16000000)
 	clock_init(SYS_CLK_16M_Crystal);
@@ -208,8 +209,6 @@ _attribute_ram_code_ int main (void)    //must run in ramcode
 	{
 		user_init();
 	}
-
-	my_printf("hello mesh\r\n");
 
     irq_enable();
 

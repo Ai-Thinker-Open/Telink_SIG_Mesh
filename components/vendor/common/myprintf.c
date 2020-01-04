@@ -31,7 +31,7 @@ _attribute_ram_code_ static void uart_put_char(u8 byte){
 	u8 j = 0;
 	u32 t1 = 0,t2 = 0;
 	
-	REG_ADDR8(0x582+((DEBUG_INFO_TX_PIN>>8)<<3)) &= ~(DEBUG_INFO_TX_PIN & 0xff) ;//Enable output
+//	REG_ADDR8(0x582+((DEBUG_INFO_TX_PIN>>8)<<3)) &= ~(DEBUG_INFO_TX_PIN & 0xff) ;//Enable output
 	u32 pcTxReg = (0x583+((DEBUG_INFO_TX_PIN>>8)<<3));//register GPIO output
 	u8 tmp_bit0 = read_reg8(pcTxReg) & (~(DEBUG_INFO_TX_PIN & 0xff));
 	u8 tmp_bit1 = read_reg8(pcTxReg) | (DEBUG_INFO_TX_PIN & 0xff);
@@ -63,7 +63,7 @@ _attribute_ram_code_ static void uart_put_char(u8 byte){
 }
 _attribute_ram_code_ void uart_simu_send_bytes(u8 *p,int len)
 {
-    gpio_setup_up_down_resistor(DEBUG_INFO_TX_PIN,PM_PIN_PULLUP_1M);
+//    gpio_setup_up_down_resistor(DEBUG_INFO_TX_PIN,PM_PIN_PULLUP_1M);
     #if SIMU_UART_IRQ_EN
     u8 r = irq_disable();
     #endif

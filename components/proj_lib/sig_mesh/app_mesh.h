@@ -1502,10 +1502,10 @@ void user_log_info(u8 *pbuf,int len,char  *format,...);
 #endif
 #define MESH_KR_CFG_RETRY_MAX_CNT 	10// or it will wait until keybind timeout 
 
-#define TL_LOG_ERROR_STRING		"[ERR]:"
-#define TL_LOG_WARNING_STRING	"[WARN]:"
-#define TL_LOG_INFO_STRING 		"[INFO]:"
-#define TL_LOG_DEBUG_STRING 	"[DEBUG]:"
+#define TL_LOG_ERROR_STRING		"[\033[3;31mERRO\033[0m]:"
+#define TL_LOG_WARNING_STRING	"[\033[3;33mWARN\033[0m]:"
+#define TL_LOG_INFO_STRING 		"[\033[3;32mINFO\033[0m]:"
+#define TL_LOG_DEBUG_STRING 	"[\033[3;34mDBUG\033[0m]:"
 
 
 typedef enum{

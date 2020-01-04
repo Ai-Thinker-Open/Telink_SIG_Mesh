@@ -80,10 +80,13 @@ extern "C" {
 #define UART_RX_PIN		UART_RX_PB0
 #endif
 
-#define HCI_LOG_FW_EN   0
+#define HCI_LOG_FW_EN   1 //串口打印调试使能
 #if HCI_LOG_FW_EN
-#define DEBUG_INFO_TX_PIN           		GPIO_PB2
-#define PRINT_DEBUG_INFO                    1
+	#define PRINT_DEBUG_INFO                    1
+	#define DEBUG_INFO_TX_PIN           		GPIO_PB1
+	#define PB1_OUTPUT_ENABLE         			1
+	#define PB1_DATA_OUT                        1 //must
+	#define PULL_WAKEUP_SRC_PB1         					PM_PIN_PULLUP_10K
 #endif
 
 #define ADC_ENABLE		0
@@ -233,12 +236,8 @@ extern "C" {
 #define WATCHDOG_INIT_TIMEOUT		2000  //in mi mode the watchdog timeout is 20s
 #endif
 
-///////////////////////debug printf///////////////
-#define UART_PRINT_DEBUG_ENABLE 1
-#define PRINT_BAUD_RATE 500000
-#define DEBUG_INFO_TX_PIN GPIO_PB1
-#define PB1_OUTPUT_ENABLE	1
-#define PULL_WAKEUP_SRC_PB1 PM_PIN_PULLUP_1M
+
+
 
 /////////////////// set default   ////////////////
 

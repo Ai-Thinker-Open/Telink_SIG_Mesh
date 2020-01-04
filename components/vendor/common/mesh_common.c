@@ -2259,7 +2259,7 @@ void tl_log_msg_warn(u16 module,u8 *pbuf,int len,char  *format,...)
 #if (WIN32 || HCI_LOG_FW_EN)
 	char tl_log_str[MAX_STRCAT_BUF] = TL_LOG_WARNING_STRING;
 	if(!tl_log_msg_valid(tl_log_str,sizeof(tl_log_str),module)){
-		return ;
+		//return ;
 	}
 	va_list list;
 	va_start( list, format );
@@ -2272,7 +2272,7 @@ void tl_log_msg_info(u16 module,u8 *pbuf,int len,char  *format,...)
 #if (WIN32 || HCI_LOG_FW_EN)
 	char tl_log_str[MAX_STRCAT_BUF] = TL_LOG_INFO_STRING;
 	if(!tl_log_msg_valid(tl_log_str,sizeof(tl_log_str),module)){
-		return ;
+		//return ;
 	}
 	va_list list;
 	va_start( list, format );
@@ -2296,7 +2296,7 @@ void tl_log_msg_dbg(u16 module,u8 *pbuf,int len,char  *format,...)
 #if (WIN32 || HCI_LOG_FW_EN)
 	char tl_log_str[MAX_STRCAT_BUF] = TL_LOG_DEBUG_STRING;
 	if(!tl_log_msg_valid(tl_log_str,sizeof(tl_log_str),module)){
-		return ;
+		//return ;
 	}
 	va_list list;
 	va_start( list, format );
