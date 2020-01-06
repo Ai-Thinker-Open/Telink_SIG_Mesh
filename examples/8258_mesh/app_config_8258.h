@@ -26,6 +26,9 @@
 extern "C" {
 #endif
 
+#define __PRINT_MACRO(x) #x
+#define PRINT_MARCO(x) #x"=" __PRINT_MACRO(x)
+
 #include "vendor/common/version.h"    // include mesh_config.h inside.
 //////////////////board sel/////////////////////////////////////
 #define PCBA_8258_DONGLE_48PIN          1
@@ -186,10 +189,24 @@ extern "C" {
 #define XIAOMI_TEST_CODE_ENABLE 	0
 
 //---------------  LED / PWM
-#include "sdk_config_8258_light_cw.h"
 
+#define PWM_R       GPIO_PB4
+#define PWM_G       GPIO_PB5
 #define PWM_B       GPIO_PC2		//blue
 #define PWM_W       GPIO_PB7		//white
+
+#define FACTORY_COUNT  5 //FACTORY_RESTORE
+
+/**************************************
+ * 对接音箱模式
+ * 可能值：  MESH_NORMAL_MODE		 正常模式
+            MESH_SPIRIT_ENABLE		对接天猫精灵
+            MESH_MI_ENABLE          对接小爱同学
+
+ * 默认值：MESH_NORMAL_MODE
+ * ***********************************/
+#define CONTRON_MODE MESH_SPIRIT_ENABLE
+
 
 #define PWM_FUNC_R  AS_PWM  // AS_PWM_SECOND
 #define PWM_FUNC_G  AS_PWM  // AS_PWM_SECOND
