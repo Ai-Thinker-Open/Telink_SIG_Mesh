@@ -26,12 +26,8 @@
 extern "C" {
 #endif
 
-#include "../../vendor/common/version.h"    // include mesh_config.h inside.
-//////////////////board sel/////////////////////////////////////
-#define PCBA_8278_DONGLE_48PIN          1
-#define PCBA_8278_C1T197A30_V1_0        2
-#define PCBA_SEL			    PCBA_8278_DONGLE_48PIN
-
+#define __PRINT_MACRO(x) #x
+#define PRINT_MARCO(x) #x"=" __PRINT_MACRO(x)
 
 #define _USER_CONFIG_DEFINED_	1	// must define this macro to make others known
 #define	__LOG_RT_ENABLE__		0
@@ -68,27 +64,17 @@ extern "C" {
 #define HCI_USE_UART	1
 #define HCI_USE_USB		2
 
-#if WIN32
-#define HCI_ACCESS		HCI_USE_USB
-#else
 #define HCI_ACCESS		HCI_USE_NONE
-#endif 
 
 #if (HCI_ACCESS==HCI_USE_UART)
-#define UART_TX_PIN		UART_TX_PB1
-#define UART_RX_PIN		UART_RX_PB0
-#endif
-
-#define HCI_LOG_FW_EN   0
-#if HCI_LOG_FW_EN
-#define DEBUG_INFO_TX_PIN           		GPIO_PB2
-#define PRINT_DEBUG_INFO                    1
+	#define UART_TX_PIN		UART_TX_PB1
+	#define UART_RX_PIN		UART_RX_PB0
 #endif
 
 #define ADC_ENABLE		0
 #if ADC_ENABLE
-#define ADC_CHNM_ANA_INPUT 		AVSS
-#define ADC_CHNM_REF_SRC 		RV_1P428
+	#define ADC_CHNM_ANA_INPUT 		AVSS
+	#define ADC_CHNM_REF_SRC 		RV_1P428
 #endif
 
 #define ONLINE_STATUS_EN        0
@@ -96,6 +82,41 @@ extern "C" {
 #define DUAL_MODE_ADAPT_EN 			0   // dual mode as master with Zigbee
 #if (0 == DUAL_MODE_ADAPT_EN)
 #define DUAL_MODE_WITH_TLK_MESH_EN  0   // dual mode as slave with Telink mesh
+#endif
+
+
+/***********配置PWM引脚********************/
+
+#define PWM_R       GPIO_PB4		
+#define PWM_G       GPIO_PB5
+#define PWM_B       GPIO_PC2		//blue
+#define PWM_W       GPIO_PB7		//white
+
+#define GPIO_LED	PWM_R		
+
+#define FACTORY_COUNT  5 //FACTORY_RESTORE
+
+/**************************************
+ * 对接音箱模式
+ * 可能值：  MESH_NORMAL_MODE		 正常模式
+            MESH_SPIRIT_ENABLE		对接天猫精灵
+            MESH_MI_ENABLE          对接小爱同学
+
+ * 默认值：MESH_NORMAL_MODE
+ * ***********************************/
+#define CONTRON_MODE MESH_SPIRIT_ENABLE
+
+
+/********************************************
+ * 串口调试功能配置
+ * ******************************************/
+#define HCI_LOG_FW_EN   1 //串口打印调试使能
+#if HCI_LOG_FW_EN
+	#define PRINT_DEBUG_INFO                    1
+	#define DEBUG_INFO_TX_PIN           		GPIO_PB1
+	#define PB1_OUTPUT_ENABLE         			1
+	#define PB1_DATA_OUT                        1 //must
+	#define PULL_WAKEUP_SRC_PB1         		PM_PIN_PULLUP_10K
 #endif
 
 /////////////////// mesh project config /////////////////////////////////
@@ -110,7 +131,11 @@ extern "C" {
 #endif
 
 /////////////////// MODULE /////////////////////////////////
+#if MI_SWITCH_LPN_EN
+#define BLE_REMOTE_PM_ENABLE			1
+#else
 #define BLE_REMOTE_PM_ENABLE			0
+#endif
 #define BLE_REMOTE_SECURITY_ENABLE      0
 #define BLE_IR_ENABLE					0
 #define BLE_SIG_MESH_CERTIFY_ENABLE 	0
@@ -143,45 +168,18 @@ extern "C" {
 #define KB_REPEAT_KEY_NUM				1
 //
 
-//----------------------- GPIO for UI --------------------------------
-//---------------  Button 
-#if (PCBA_SEL == PCBA_8278_DONGLE_48PIN)
-#define PULL_WAKEUP_SRC_PD6     PM_PIN_PULLUP_1M	//btn
-#define PULL_WAKEUP_SRC_PD5     PM_PIN_PULLUP_1M	//btn
-#define PD6_INPUT_ENABLE		1
-#define PD5_INPUT_ENABLE		1
-#define	SW1_GPIO				GPIO_PD6
-#define	SW2_GPIO				GPIO_PD5
-#elif(PCBA_SEL == PCBA_8278_C1T197A30_V1_0)
-#define PULL_WAKEUP_SRC_PB2     PM_PIN_PULLUP_1M	//btn
-#define PULL_WAKEUP_SRC_PB3     PM_PIN_PULLUP_1M	//btn
-#define PB2_INPUT_ENABLE		1
-#define PB3_INPUT_ENABLE		1
-#define	SW1_GPIO				GPIO_PB2            // SW2 in board
-#define	SW2_GPIO				GPIO_PB3            // SW4 in board
+/*****************************按键设置******************************/
+// #define PULL_WAKEUP_SRC_PD2     PM_PIN_PULLUP_1M	//btn
+// #define PULL_WAKEUP_SRC_PD1     PM_PIN_PULLUP_1M	//btn
+// #define PD2_INPUT_ENABLE		1
+// #define PD1_INPUT_ENABLE		1
+// #define	SW1_GPIO				GPIO_PD2
+// #define	SW2_GPIO				GPIO_PD1
 
-#if 1 // must output 0, because it is keyboard array. pull down is not enough to output low level.
-#define PB4_FUNC                AS_GPIO
-#define PB4_OUTPUT_ENABLE       1
-#define PB4_DATA_OUT            0
-#endif
-#endif
 
 #define XIAOMI_MODULE_ENABLE	MI_API_ENABLE
 #define XIAOMI_TEST_CODE_ENABLE 	0
 
-//---------------  LED / PWM
-#if(PCBA_SEL == PCBA_8278_DONGLE_48PIN)
-#define PWM_R       GPIO_PWM1A3		//red
-#define PWM_G       GPIO_PWM0A2		//green
-#define PWM_B       GPIO_PWM3B0		//blue
-#define PWM_W       GPIO_PWM4B1		//white
-#elif(PCBA_SEL == PCBA_8278_C1T197A30_V1_0)   // PCBA_8258_DEVELOPMENT_BOARD
-#define PWM_R       GPIO_PWM1ND3	//red
-#define PWM_G       GPIO_PWM2ND4	//green
-#define PWM_B       GPIO_PD5		//blue
-#define PWM_W       GPIO_PWM3D2		//white
-#endif
 
 #define PWM_FUNC_R  AS_PWM  // AS_PWM_SECOND
 #define PWM_FUNC_G  AS_PWM  // AS_PWM_SECOND
@@ -197,8 +195,6 @@ extern "C" {
 #define PWM_INV_G   (GET_PWM_INVERT_VAL(PWM_G, PWM_FUNC_G))
 #define PWM_INV_B   (GET_PWM_INVERT_VAL(PWM_B, PWM_FUNC_B))
 #define PWM_INV_W   (GET_PWM_INVERT_VAL(PWM_W, PWM_FUNC_W))
-
-#define GPIO_LED	PWM_R
 
 
 /////////////open SWS digital pullup to prevent MCU err, this is must ////////////
@@ -230,9 +226,10 @@ extern "C" {
 
 
 
+
 /////////////////// set default   ////////////////
 
-#include "../common/default_config.h"
+//#include "vendor/common/default_config.h"
 
 /* Disable C linkage for C++ Compilers: */
 #if defined(__cplusplus)

@@ -27,51 +27,8 @@
 #endif
 #include "../../proj/mcu/config.h"
 
-#if (__PROJECT_8266_MASTER_KMA_DONGLE__ || __PROJECT_8267_MASTER_KMA_DONGLE__)
-	#include "../8267_master_kma_dongle/app_config.h"
-#elif (__PROJECT_MESH__ || WIN32)	// include MESH / lib_sig_mesh.
-	#if((MCU_CORE_TYPE == MCU_CORE_8269) || WIN32)
-	#include "app_config_8269.h"
-	#elif(MCU_CORE_TYPE == MCU_CORE_8258)
-	#include "app_config_8258.h"
-	#elif(MCU_CORE_TYPE == MCU_CORE_8278)
-	#include "app_config_8278.h"
-	#endif
-#elif (__PROJECT_MESH_LPN__)		// include MESH_LPN / lib_sig_mesh_LPN.
-	#if(MCU_CORE_TYPE == MCU_CORE_8269)
-	#include "../mesh_lpn/app_config_8269.h"
-	#elif(MCU_CORE_TYPE == MCU_CORE_8258)
-	#include "../mesh_lpn/app_config_8258.h"
-	#elif(MCU_CORE_TYPE == MCU_CORE_8278)
-	#include "../mesh_lpn/app_config_8278.h"
-	#endif
-#elif (__PROJECT_MESH_SWITCH__)
-	#if(MCU_CORE_TYPE == MCU_CORE_8269)
-	#include "../mesh_switch/app_config_8269.h"
-	#elif(MCU_CORE_TYPE == MCU_CORE_8258)
-	#include "../mesh_switch/app_config_8258.h"
-	#elif(MCU_CORE_TYPE == MCU_CORE_8278)
-	#include "../mesh_switch/app_config_8278.h"
-	#endif
-#elif (__PROJECT_MESH_PRO__ || __PROJECT_MESH_GW_NODE__)
-	#if(MCU_CORE_TYPE == MCU_CORE_8269)
-	#include "../mesh_provision/app_config_8269.h"
-	#elif(MCU_CORE_TYPE == MCU_CORE_8258)
-	#if(__PROJECT_MESH_GW_NODE_HK__)
-	#include "../mesh_gw_node_homekit/app_config_8258.h"
-	#else
-	#include "../mesh_provision/app_config_8258.h"
-	#endif
-	#elif(MCU_CORE_TYPE == MCU_CORE_8278)
-	#include "../mesh_provision/app_config_8278.h"
-	#endif
-#elif (__PROJECT_SPIRIT_LPN__)
-	#if(MCU_CORE_TYPE == MCU_CORE_8258)
-	#include "../spirit_lpn/app_config_8258.h"
-	#elif(MCU_CORE_TYPE == MCU_CORE_8278)
-	#include "../spirit_lpn/app_config_8278.h"
-	#endif
-#else
-	#include "../common/default_config.h"
-#endif
+#include "vendor/common/version.h"    // include mesh_config.h inside.
+#include "app_config.h"
+#include "../common/default_config.h"
+
 

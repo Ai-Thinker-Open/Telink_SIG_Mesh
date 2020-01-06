@@ -179,25 +179,25 @@ new factory reset:
 user can change any one of factory_reset_serials, and also can change SERIALS_CNT
 *****************************************/
 
-// const u8 factory_reset_serials[] = { 0, 3,
-//                                      0, 3,
-//                                      0, 3,
-//                                      3, 30,
-//                                      3, 30,};
-#include "sdk_config_8258_light_cw.h"
-#if (FACTORY_COUNT == 5)
-const u8 factory_reset_serials[] = { 0, 3, 0, 3,0, 3,0, 3, 0, 3,};
-#elif  (FACTORY_COUNT == 10)
-const u8 factory_reset_serials[] = { 0, 3, 0, 3,0, 3,0, 3, 0, 3,
- 									 0, 3, 0, 3,0, 3,0, 3, 0, 3,};
+const u8 factory_reset_serials[] = { 0, 3,
+                                     0, 3,
+                                     0, 3,
+                                     3, 30,
+                                     3, 30,};
+// #include "sdk_config_8258_light_cw.h"
+// #if (FACTORY_COUNT == 5)
+// const u8 factory_reset_serials[] = { 0, 3, 0, 3,0, 3,0, 3, 0, 3,};
+// #elif  (FACTORY_COUNT == 10)
+// const u8 factory_reset_serials[] = { 0, 3, 0, 3,0, 3,0, 3, 0, 3,
+//  									 0, 3, 0, 3,0, 3,0, 3, 0, 3,};
 
-#elif  (FACTORY_COUNT == 15)
-const u8 factory_reset_serials[] = { 0, 3, 0, 3,0, 3,0, 3, 0, 3,
-									 0, 3, 0, 3,0, 3,0, 3, 0, 3,
-									 0, 3, 0, 3,0, 3,0, 3, 0, 3,};
-#else
-const u8 factory_reset_serials[] = { 0, 3, 0, 3,0, 3,0, 3, 0, 3,};
-#endif
+// #elif  (FACTORY_COUNT == 15)
+// const u8 factory_reset_serials[] = { 0, 3, 0, 3,0, 3,0, 3, 0, 3,
+// 									 0, 3, 0, 3,0, 3,0, 3, 0, 3,
+// 									 0, 3, 0, 3,0, 3,0, 3, 0, 3,};
+// #else
+// const u8 factory_reset_serials[] = { 0, 3, 0, 3,0, 3,0, 3, 0, 3,};
+// #endif
 
 #define RESET_CNT_INVALID               0
 #define RESET_TRIGGER_VAL               (sizeof((factory_reset_serials)))
