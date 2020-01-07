@@ -128,8 +128,7 @@ extern "C" {
 // #else
 // #define MESH_USER_DEFINE_MODE 	MESH_NORMAL_MODE
 // #endif
-#include "app_config.h"
-#define MESH_USER_DEFINE_MODE 	CONTRON_MODE 
+#define MESH_USER_DEFINE_MODE 	MESH_SPIRIT_ENABLE 
 
 // vendor id list
 #define SHA256_BLE_MESH_PID		0x01A8

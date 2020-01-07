@@ -26,8 +26,10 @@
 extern "C" {
 #endif
 
+
 #define __PRINT_MACRO(x) #x
 #define PRINT_MARCO(x) #x"=" __PRINT_MACRO(x)
+
 
 #define _USER_CONFIG_DEFINED_	1	// must define this macro to make others known
 #define	__LOG_RT_ENABLE__		0
@@ -95,16 +97,6 @@ extern "C" {
 #define GPIO_LED	PWM_R		
 
 #define FACTORY_COUNT  5 //FACTORY_RESTORE
-
-/**************************************
- * 对接音箱模式
- * 可能值：  MESH_NORMAL_MODE		 正常模式
-            MESH_SPIRIT_ENABLE		对接天猫精灵
-            MESH_MI_ENABLE          对接小爱同学
-
- * 默认值：MESH_NORMAL_MODE
- * ***********************************/
-#define CONTRON_MODE MESH_SPIRIT_ENABLE
 
 
 /********************************************
