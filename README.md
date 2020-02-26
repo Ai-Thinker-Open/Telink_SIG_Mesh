@@ -6,9 +6,9 @@ Telink 泰凌位 蓝牙Mesh芯片软件开发套件
 ---------------------------------------------------
 
 ### 获取TC32编译工具链(文档仅适用于Linux)
->目前仅测试了linux系统，Mac OS及Windows系统仅提供了编译工具变，需自行设置环境变量
+>目前仅测试了linux及Mac OS系统，Windows系统仅提供了编译工具链，需自行设置环境变量
 
->Mac OS版本工具链下载地址 ```https://shyboy.oss-cn-shenzhen.aliyuncs.com/readonly/tc32-mac.zip```
+>Mac OS版本获取编译工具链 ```git clone https://github.com/flyskywhy/tc32 -b macos```
 
 >Windows 版本工具链下载地址 ```https://shyboy.oss-cn-shenzhen.aliyuncs.com/readonly/tc32-win.rar```
 
