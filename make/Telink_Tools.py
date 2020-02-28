@@ -175,7 +175,7 @@ def burn(_port, args):
     bar_len = 50
 
     while True:
-        data = fo.read(256)
+        data = fo.read(40)
         if len(data) < 1: break
 
         if not telink_flash_write(_port, firmware_addr, data):
@@ -262,7 +262,7 @@ def main(custom_commandline=None):
 
     print("Open " + args.port + " ... ... ", end="")
     
-    _port = serial.Serial(args.port, 921600, timeout=0.5)
+    _port = serial.Serial(args.port, 921600, timeout=0.1)
 
     if not _port.isOpen():
         _port.open()
