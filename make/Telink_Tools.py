@@ -242,6 +242,10 @@ def burn_triad(_port, args):
         print("\033[3;31mTriad Error!\033[0m")
         return
 
+    print("Your productID =  " + args.productID )
+    print("Your MAC =   " + args.MAC )
+    print("Your Secret =   " + args.Secret )
+
     print("Erase Flash at 0x78000 len 4 KB ... ... ",end="")
     sys.stdout.flush()
 

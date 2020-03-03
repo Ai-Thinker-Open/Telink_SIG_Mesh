@@ -27,7 +27,7 @@
 #define SIMU_BAUD_1M        1000000
 #define SIMU_BAUD_500K      500000
 
-#define BAUD_USE    SIMU_BAUD_500K
+#define BAUD_USE    SIMU_BAUD_115200
 #define SIMU_UART_IRQ_EN    1
 
 
