@@ -1,15 +1,34 @@
 # Telink SIG Mesh SDK
 
-Telink 泰凌位 蓝牙Mesh芯片软件开发套件
+Telink 泰凌微 蓝牙Mesh芯片软件开发套件
 
 # 使用方法
 ---------------------------------------------------
 
 ### 获取TC32编译工具链(文档仅适用于Linux)
->目前仅测试了linux系统，Mac OS及Windows系统仅提供了编译工具变，需自行设置环境变量
+>目前仅测试了linux系统，Mac OS;Windows系统仅提供了编译工具变，需自行设置环境变量
 
->Mac OS版本工具链下载地址 ```https://shyboy.oss-cn-shenzhen.aliyuncs.com/readonly/tc32-mac.zip```
+>Mac OS版交叉编译工具下载地址 ```https://sinoprobe.dscloud.me:8443/telink/tc32_for_macOS.zip```
 
+或直接shell console输入：
+
+wget https://sinoprobe.dscloud.me:8443/telink/tc32_for_macOS.zip
+
+下载完成后，自动解压到 tc32/ 目录，将此目录拷贝到合适的目录<your_path>，并在~/.bash_profile中加入:
+
+export PATH=$PATH:<your_path>/bin
+
+console 输入: gcc -v 查看本机是否安装gcc编译器，xcode自带，输出如下:
+
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/4.2.1
+Apple clang version 11.0.0 (clang-1100.0.33.16)
+Target: x86_64-apple-darwin19.3.0
+Thread model: posix
+InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+
+console 输入: tc32-elf-gcc -v 输出同linux系统，验证交叉编译器工作正常。
+
+ 
 >Windows 版本工具链下载地址 ```https://shyboy.oss-cn-shenzhen.aliyuncs.com/readonly/tc32-win.rar```
 
 linux版本获取编译工具链
@@ -36,7 +55,7 @@ linux版本获取编译工具链
     Target: tc32-elf
     Configured with: ../../gcc-4.5.1/configure --program-prefix=tc32-elf- --target=tc32-elf --prefix=/opt/tc32 --enable-languages=c --libexecdir=/opt/tc32/lib --with-gnu-as --with-gnu-ld --without-headers --disable-decimal-float --disable-nls --disable-mathvec --with-pkgversion='Telink TC32 version 2.0 build' --without-docdir --without-fp --without-tls --disable-shared --disable-threads --disable-libffi --disable-libquadmath --disable-libstdcxx-pch --disable-libmudflap --disable-libgomp --disable-libssp -v --without-docdir --enable-soft-float --with-newlib --with-gcc --with-gnu- --with-gmp=/opt/tc32/addontools --with-mpc=/opt/tc32/addontools --with-mpfr=/opt/tc32/addontools
     Thread model: single
-    gcc version 4.5.1.tc32-elf-1.5 (Telink TC32 version 2.0 build) 
+    gcc version 4.5.1.tc32-elf-1.5 (Telink TC32 version 2.0 build)
 
 ### 获取SDK
 
