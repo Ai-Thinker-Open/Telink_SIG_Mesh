@@ -13,7 +13,7 @@ Telink 泰凌微 蓝牙Mesh芯片软件开发套件
 >Linux版交叉编译工具下载地址 ```https://sinoprobe.dscloud.me:8443/telink/tc32_gcc_v2.0.tar.bz2```
 
 
-###MacOSX编译环境设置
+### MacOSX编译环境设置
 或直接shell console输入：
 
 wget https://sinoprobe.dscloud.me:8443/telink/tc32_for_macOS.zip
@@ -30,16 +30,16 @@ Target: x86_64-apple-darwin19.3.0
 Thread model: posix
 InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
 
-console 输入: tc32-elf-gcc -v 输出同linux系统，验证交叉编译器工作正常。
+console 输入:
+    tc32-elf-gcc -v
+
+输出同linux系统，验证交叉编译器工作正常。
 
 编译环境python3必不可少！
 
+### Linux版本获取编译工具链
 
-
-
-###linux版本获取编译工具链
-
-    wget https://sinoprobe.dscloud.me:8443/telink/tc32_gcc_v2.0.tar.bz2
+wget https://sinoprobe.dscloud.me:8443/telink/tc32_gcc_v2.0.tar.bz2
 
 解压到opt文件夹 *(也可解压到其他文件夹)*
 
