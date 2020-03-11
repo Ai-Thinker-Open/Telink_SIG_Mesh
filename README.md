@@ -5,16 +5,20 @@ Telink 泰凌微 蓝牙Mesh芯片软件开发套件
 # 使用方法
 ---------------------------------------------------
 
-### 获取TC32编译工具链(文档仅适用于Linux)
->目前仅测试了linux系统，Mac OS;Windows系统仅提供了编译工具变，需自行设置环境变量
+### 获取TC32编译工具链
+>目前仅测试了Mac OS和Linux和操作系统
 
 >Mac OS版交叉编译工具下载地址 ```https://sinoprobe.dscloud.me:8443/telink/tc32_for_macOS.zip```
 
+>Linux版交叉编译工具下载地址 ```https://sinoprobe.dscloud.me:8443/telink/tc32_gcc_v2.0.tar.bz2```
+
+
+###MacOSX编译环境设置
 或直接shell console输入：
 
 wget https://sinoprobe.dscloud.me:8443/telink/tc32_for_macOS.zip
 
-下载完成后，自动解压到 tc32/ 目录，将此目录拷贝到合适的目录<your_path>，并在~/.bash_profile中加入:
+下载完成后，解压到 tc32/ 目录，将此目录拷贝到合适的目录<your_path>，并在~/.bash_profile中加入:
 
 export PATH=$PATH:<your_path>/bin
 
@@ -28,12 +32,14 @@ InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault
 
 console 输入: tc32-elf-gcc -v 输出同linux系统，验证交叉编译器工作正常。
 
- 
->Windows 版本工具链下载地址 ```https://shyboy.oss-cn-shenzhen.aliyuncs.com/readonly/tc32-win.rar```
+编译环境python3必不可少！
 
-linux版本获取编译工具链
 
-    wget https://shyboy.oss-cn-shenzhen.aliyuncs.com/readonly/tc32_gcc_v2.0.tar.bz2
+
+
+###linux版本获取编译工具链
+
+    wget https://sinoprobe.dscloud.me:8443/telink/tc32_gcc_v2.0.tar.bz2
 
 解压到opt文件夹 *(也可解压到其他文件夹)*
 
@@ -59,7 +65,7 @@ linux版本获取编译工具链
 
 ### 获取SDK
 
-    git clone https://github.com/Ai-Thinker-Open/Telink_SIG_Mesh.git
+    git clone https://github.com/sinoprobe/Telink_SIG_Mesh.git
 
 
 ### 编译
@@ -82,9 +88,7 @@ linux版本获取编译工具链
 
 ### 烧录程序到芯片
 
-安信可自主开发了串口烧录工具，无需官方烧录器即可使用，前提是要先将安信可bootloader烧录到模块中。
-
-串口烧录接线方式如下(安信可TB-02模块)：
+串口烧录接线方式如下：
 
 |串口|模块|
 |----|---|
