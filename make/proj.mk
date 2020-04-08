@@ -12,7 +12,7 @@ $(OUT_PATH)/proj/app/usbmouse.o
 
 
 # Each subdirectory must supply rules for building sources it contributes
-$(OUT_PATH)/proj/app/%.o: $(TEL_PATH)/components/proj/app/%.c
+$(OUT_PATH)/proj/app/%.o: $(TEL_PATH)/SDK_3.1.5/proj/app/%.c
 	@echo 'Building file: $<'
 	@tc32-elf-gcc $(GCC_FLAGS) $(INCLUDE_PATHS) -c -o"$@" "$<"
 
@@ -38,7 +38,7 @@ $(OUT_PATH)/proj/common/tutility.o
 
 
 # Each subdirectory must supply rules for building sources it contributes
-$(OUT_PATH)/proj/common/%.o: $(TEL_PATH)/components/proj/common/%.c
+$(OUT_PATH)/proj/common/%.o: $(TEL_PATH)/SDK_3.1.5/proj/common/%.c
 	@echo 'Building file: $<'
 	@tc32-elf-gcc $(GCC_FLAGS) $(INCLUDE_PATHS) -c -o"$@" "$<"
 
@@ -55,7 +55,7 @@ $(OUT_PATH)/proj/drivers/usb.o
 
 
 # Each subdirectory must supply rules for building sources it contributes
-$(OUT_PATH)/proj/drivers/%.o: $(TEL_PATH)/components/proj/drivers/%.c
+$(OUT_PATH)/proj/drivers/%.o: $(TEL_PATH)/SDK_3.1.5/proj/drivers/%.c
 	@echo 'Building file: $<'
 	@tc32-elf-gcc $(GCC_FLAGS) $(INCLUDE_PATHS) -c -o"$@" "$<"
 
@@ -66,15 +66,27 @@ $(OUT_PATH)/proj/drivers/%.o: $(TEL_PATH)/components/proj/drivers/%.c
 
 OUT_DIR += /proj/mcu
 
-OBJS += \
-$(OUT_PATH)/proj/mcu/putchar.o 
+OBJS += $(OUT_PATH)/proj/mcu/putchar.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes
-$(OUT_PATH)/proj/mcu/%.o: $(TEL_PATH)/components/proj/mcu/%.c
+$(OUT_PATH)/proj/mcu/%.o: $(TEL_PATH)/SDK_3.1.5/proj/mcu/%.c
 	@echo 'Building file: $<'
 	@tc32-elf-gcc $(GCC_FLAGS) $(INCLUDE_PATHS) -c -o"$@" "$<"
 
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+OUT_DIR += /proj/print
+
+OBJS += $(OUT_PATH)/proj/print/u_printf.o
+
+
+# Each subdirectory must supply rules for building sources it contributes
+$(OUT_PATH)/proj/print/%.o: $(TEL_PATH)/SDK_3.1.5/proj/print/%.c
+	@echo 'Building file: $<'
+	@tc32-elf-gcc $(GCC_FLAGS) $(INCLUDE_PATHS) -c -o"$@" "$<"
 
 ################################################################################
 # Automatically-generated file. Do not edit!
@@ -104,12 +116,12 @@ $(OUT_PATH)/proj/mcu/%.o: $(TEL_PATH)/components/proj/mcu/%.c
 
 
 # Each subdirectory must supply rules for building sources it contributes
-$(OUT_PATH)/proj/mcu_spec/%.o: $(TEL_PATH)/components/proj/mcu_spec/%.c
-	@echo 'Building file: $<'
-	@tc32-elf-gcc $(GCC_FLAGS) $(INCLUDE_PATHS) -c -o"$@" "$<"
+# $(OUT_PATH)/proj/mcu_spec/%.o: $(TEL_PATH)/SDK_3.1.5/proj/mcu_spec/%.c
+# 	@echo 'Building file: $<'
+# 	@tc32-elf-gcc $(GCC_FLAGS) $(INCLUDE_PATHS) -c -o"$@" "$<"
 
-proj/mcu_spec/%.o: ../proj/mcu_spec/%.S
-	@echo 'Building file: $<'
-	@tc32-elf-gcc $(GCC_FLAGS) $(INCLUDE_PATHS) -c -o"$@" "$<"
+# proj/mcu_spec/%.o: proj/mcu_spec/%.S
+# 	@echo 'Building file: $<'
+# 	@tc32-elf-gcc $(GCC_FLAGS) $(INCLUDE_PATHS) -c -o"$@" "$<"
 
 

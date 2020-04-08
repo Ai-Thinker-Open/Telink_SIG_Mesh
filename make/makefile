@@ -49,20 +49,19 @@ GCC_FLAGS := \
 -fshort-wchar \
 -fms-extensions 
 
-INCLUDE_PATHS := -I$(TEL_PATH)/components -I$(PROJECT_PATH)
+INCLUDE_PATHS := -I$(TEL_PATH)/SDK_3.1.5 -I$(PROJECT_PATH)
 
 GCC_FLAGS += $(TEL_CHIP)
 
-LS_FLAGS := $(TEL_PATH)/components/boot.link
+LS_FLAGS := $(TEL_PATH)/SDK_3.1.5/boot.link
 
 #include SDK makefile
 -include $(TEL_PATH)/make/boot.mk
 -include $(TEL_PATH)/make/driver.mk
 -include $(TEL_PATH)/make/proj.mk
--include $(TEL_PATH)/make/vendor.mk
 
-#include Project makefile
--include $(PROJECT_PATH)/project.mk
+-include $(PROJECT_PATH)/mesh/mesh.mk
+-include $(PROJECT_PATH)/app.mk
 
 # Add inputs and outputs from these tool invocations to the build variables 
 LST_FILE := $(OUT_PATH)/$(PROJECT_NAME).lst
@@ -80,7 +79,7 @@ main-build: $(ELF_FILE) secondary-outputs
 # Tool invocations
 $(ELF_FILE): $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
-	@tc32-elf-ld --gc-sections -L $(TEL_PATH)/components/proj_lib -T $(LS_FLAGS) -o $(ELF_FILE) $(OBJS) $(USER_OBJS) $(LIBS)
+	@tc32-elf-ld --gc-sections -L $(TEL_PATH)/SDK_3.1.5/proj_lib -T $(LS_FLAGS) -o $(ELF_FILE) $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -118,13 +117,16 @@ flash:
 erase_fw:
 	python3 $(TEL_PATH)/make/Telink_Tools.py -p $(DOWNLOAD_PORT) erase_flash 0x4000 44
 
+erase_all:
+	python3 $(TEL_PATH)/make/Telink_Tools.py -p $(DOWNLOAD_PORT) erase_flash 0x4000 124
+
 erase_key:
 	python3 $(TEL_PATH)/make/Telink_Tools.py -p $(DOWNLOAD_PORT) erase_flash 0x30000 16
 
 monitor:
-	python3 $(TEL_PATH)/make/monitor.py --port $(DOWNLOAD_PORT) --baud 115200 $(ELF_FILE)
+	python3 $(TEL_PATH)/make/monitor.py --port $(DOWNLOAD_PORT) --baud 500000 $(ELF_FILE)
 
 secondary-outputs: $(BIN_FILE) $(LST_FILE) $(SIZEDUMMY)
 
-.PHONY: all clean dependents flash erase_fw erase_key monitor pre-build 
+.PHONY: all clean dependents flash erase_fw erase_key monitor pre-build erase_all 
 .SECONDARY: main-build 

@@ -26,7 +26,7 @@ $(OUT_PATH)/drivers/8258/watchdog.o
 
 
 # Each subdirectory must supply rules for building sources it contributes
-$(OUT_PATH)/drivers/8258/%.o: $(TEL_PATH)/components/drivers/8258/%.c
+$(OUT_PATH)/drivers/8258/%.o: $(TEL_PATH)/SDK_3.1.5/drivers/8258/%.c
 	@echo 'Building file: $<'
 	@tc32-elf-gcc $(GCC_FLAGS) $(INCLUDE_PATHS) -c -o"$@" "$<"
 
