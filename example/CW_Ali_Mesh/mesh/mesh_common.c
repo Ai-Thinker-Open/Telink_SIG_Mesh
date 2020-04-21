@@ -2418,17 +2418,17 @@ void tl_log_msg(u32 level_module,u8 *pbuf,int len,char  *format,...)
 	u32 module = LOG_GET_MODULE(level_module);
 	u32 log_level = LOG_GET_LEVEL(level_module);
 	
-	if((0 == log_level) || (log_level > TL_LOG_LEVEL_MAX)){
-	    return ;
-	}else{
-        memcpy(tl_log_str,TL_LOG_STRING[log_level - 1],MAX_LEVEL_STRING_CNT);
-	}
+	// if((0 == log_level) || (log_level > TL_LOG_LEVEL_MAX)){
+	//     return ;
+	// }else{
+    //     memcpy(tl_log_str,TL_LOG_STRING[log_level - 1],MAX_LEVEL_STRING_CNT);
+	// }
 	
-	if(!tl_log_msg_valid(tl_log_str,sizeof(tl_log_str), module)){
-	    if(log_level != TL_LOG_LEVEL_ERROR){
-		    return ;
-		}
-	}
+	// if(!tl_log_msg_valid(tl_log_str,sizeof(tl_log_str), module)){
+	//     if(log_level != TL_LOG_LEVEL_ERROR){
+	// 	    return ;
+	// 	}
+	// }
 	
 	va_list list;
 	va_start( list, format );

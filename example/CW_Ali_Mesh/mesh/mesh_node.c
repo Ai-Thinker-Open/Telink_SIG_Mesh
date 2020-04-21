@@ -3377,6 +3377,7 @@ u8 mesh_init_flag = 1;
 void mesh_init_all()
 {	
     mesh_init_flag = 1;
+	uart_simu_send_bytes("          \r\n", 12);//第一行数据总是乱码
     LOG_MSG_INFO(TL_LOG_COMMON,0, 0,"System start ............",0);
 #if WIN32
 	mesh_global_var_init();	// must call first in user init() for firmware SDK.
