@@ -1516,7 +1516,7 @@ void user_log_info(u8 *pbuf,int len,char  *format,...);
 #define TL_LOG_LEVEL              TL_LOG_LEVEL_DEBUG
 	#endif
 #else
-#define TL_LOG_LEVEL              TL_LOG_LEVEL_ERROR // TL_LOG_LEVEL_INFO	// Note firmware size
+#define TL_LOG_LEVEL              TL_LOG_LEVEL_MAX // TL_LOG_LEVEL_INFO	// Note firmware size
 #endif
 #define MESH_KR_CFG_RETRY_MAX_CNT 	10// or it will wait until keybind timeout 
 

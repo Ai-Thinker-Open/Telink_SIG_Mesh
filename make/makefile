@@ -112,19 +112,19 @@ pre-build:
 	-@echo ' '
 
 flash:
-	python3 $(TEL_PATH)/make/Telink_Tools.py -p $(DOWNLOAD_PORT) burn $(BIN_FILE) 
+	python $(TEL_PATH)/make/Telink_Tools.py -p $(DOWNLOAD_PORT) burn $(BIN_FILE) 
 
 erase_fw:
-	python3 $(TEL_PATH)/make/Telink_Tools.py -p $(DOWNLOAD_PORT) erase_flash 0x4000 44
+	python $(TEL_PATH)/make/Telink_Tools.py -p $(DOWNLOAD_PORT) erase_flash 0x4000 44
 
 erase_all:
-	python3 $(TEL_PATH)/make/Telink_Tools.py -p $(DOWNLOAD_PORT) erase_flash 0x4000 124
+	python $(TEL_PATH)/make/Telink_Tools.py -p $(DOWNLOAD_PORT) erase_flash 0x4000 124
 
 erase_key:
-	python3 $(TEL_PATH)/make/Telink_Tools.py -p $(DOWNLOAD_PORT) erase_flash 0x30000 16
+	python $(TEL_PATH)/make/Telink_Tools.py -p $(DOWNLOAD_PORT) erase_flash 0x30000 16
 
 monitor:
-	python3 $(TEL_PATH)/make/monitor.py --port $(DOWNLOAD_PORT) --baud 500000 $(ELF_FILE)
+	python $(TEL_PATH)/make/monitor.py --port $(DOWNLOAD_PORT) --baud 115200 $(ELF_FILE)
 
 secondary-outputs: $(BIN_FILE) $(LST_FILE) $(SIZEDUMMY)
 
