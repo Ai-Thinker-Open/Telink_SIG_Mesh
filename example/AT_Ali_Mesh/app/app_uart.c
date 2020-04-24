@@ -210,7 +210,8 @@ uart_data_t * p = NULL;
 
 void app_uart_loop()
 {
-	if(data = my_fifo_get(&uart_rx_fifo)) //从fifo中获取数据
+	data = my_fifo_get(&uart_rx_fifo);
+	if(data != NULL) //从fifo中获取数据
 	{
 		p = (uart_data_t *)data;
 		at_data_process((char*)(p->data), p->dma_len);

@@ -2415,8 +2415,8 @@ void tl_log_msg(u32 level_module,u8 *pbuf,int len,char  *format,...)
 {
 #if (WIN32 || HCI_LOG_FW_EN)
 	char tl_log_str[MAX_STRCAT_BUF] = {0};
-	u32 module = LOG_GET_MODULE(level_module);
-	u32 log_level = LOG_GET_LEVEL(level_module);
+	// u32 module = LOG_GET_MODULE(level_module);
+	// u32 log_level = LOG_GET_LEVEL(level_module);
 	
 	// if((0 == log_level) || (log_level > TL_LOG_LEVEL_MAX)){
 	//     return ;

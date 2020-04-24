@@ -41,6 +41,7 @@ char *	strerror(int _errcode);
 unsigned int	strlen(const char *_s);
 char *	strncat(char *_s1, const char *_s2, unsigned int _n);
 int		strncmp(const char *_s1, const char *_s2, unsigned int _n);
+int     strxcmp(const char* firstString, const char* secondString);
 char *	strncpy(char *_s1, const char *_s2, unsigned int _n);
 char *	strpbrk(const char *_s1, const char *_s2);
 char *	strrchr(const char *_s, int _c);

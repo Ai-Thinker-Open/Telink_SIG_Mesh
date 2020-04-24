@@ -28,10 +28,11 @@ int mesh_cmd_at_data(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 
     if((cb_par->adr_src == ele_adr_primary) && (cb_par->op != 0x0282)) //如果原地址是自己,且不是开关操作，直接返回
     {
-        return;
+        return 0;
     }
 	u_sprintf(buf, "\r\n+DATA:%04X,%02X%02X,%d,",cb_par->adr_src,(cb_par->op)&0xff,(cb_par->op)>>8,par_len);
     at_print(buf);
-    at_print_hexstr(par,par_len);
+    at_print_hexstr((char*)par,par_len);
     at_print("\r\n");
+    return 0;
 }

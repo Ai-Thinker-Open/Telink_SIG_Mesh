@@ -358,7 +358,7 @@ int cb_vd_msg_attr_set(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 #endif
     }
 #endif
-
+	extern int mesh_cmd_at_data(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par);
 	mesh_cmd_at_data(par, par_len, cb_par);
     return err;
 }

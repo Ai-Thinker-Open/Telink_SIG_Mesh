@@ -45,7 +45,7 @@ u8 HEX2BYTE(u8 hex_ch)
 	return 0x00;
 }
 
-u8 HEX2BIN(u8 * p_hexstr, u8 * p_binstr)
+u16 HEX2BIN(u8 * p_hexstr, u8 * p_binstr)
 {
 	u8 bin_len = 0;
 	u8 hex_len = strlen((char *)p_hexstr);
@@ -65,7 +65,7 @@ u8 HEX2BIN(u8 * p_hexstr, u8 * p_binstr)
 	return bin_len;
 }
 
-u8 HEX2U16(u8 * p_hexstr) //将16进制字符串转换成U16类型的整数
+u16 HEX2U16(u8 * p_hexstr) //将16进制字符串转换成U16类型的整数
 {
 	u8 hexStr_len = strlen((char *)p_hexstr);
 	u16 numBer = 0;
@@ -248,7 +248,7 @@ static unsigned char atCmd_Send(char *pbuf,  int mode, int lenth)
 
 	tmp[0] = 0; tmp++;
 
-	u16 addr_dst = HEX2U16(pbuf);  //获取目的地址
+	u16 addr_dst = HEX2U16((u8*)pbuf);  //获取目的地址
 
 	pbuf = tmp;
 
@@ -259,9 +259,9 @@ static unsigned char atCmd_Send(char *pbuf,  int mode, int lenth)
     }
 	tmp[0] = 0; tmp++;
 
-	u16 data_len = STR2U16(pbuf); //获取数据长度
+	u16 data_len = STR2U16((u8*)pbuf); //获取数据长度
 
-	SendOpParaDebug(addr_dst,0,0x0182, tmp,data_len);
+	SendOpParaDebug(addr_dst,0,0x0182, (u8*)tmp,data_len);
 	return 0;
 }
 
@@ -280,18 +280,16 @@ static unsigned char atCmd_Send2App(char *pbuf,  int mode, int lenth)
 
 	tmp[0] = 0; tmp++;
 
-	u16 data_len = STR2U16(pbuf); //获取数据长度
+	u16 data_len = STR2U16((u8*)pbuf); //获取数据长度
 
-	bls_att_pushNotifyData(USER_DEFINE_ATT_HANDLE, tmp, data_len); //release
+	bls_att_pushNotifyData(USER_DEFINE_ATT_HANDLE, (u8*)tmp, data_len); //release
 	return 0;
 }
 static unsigned char atCmd_Addr(char *pbuf,  int mode, int lenth)
 {
-	char buf[64] = {0};
-
 	if(mode == AT_CMD_MODE_SET) //设置netKey
     {
-		mesh_set_ele_adr(HEX2U16(pbuf));
+		mesh_set_ele_adr(HEX2U16((u8*)pbuf));
         return 0;
     }
 
@@ -302,6 +300,7 @@ static unsigned char atCmd_Addr(char *pbuf,  int mode, int lenth)
 		at_print(buf);
 		return 0;
 	}
+	return 1;
 }
 _at_command_t gAtCmdTb_writeRead[] =
 { 

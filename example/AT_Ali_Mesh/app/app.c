@@ -341,7 +341,7 @@ void proc_ui()
 		{
 			if(press_time%3 == 0) 
 			{
-				static led_status = 0;
+				static int led_status = 0;
 				gpio_write(GPIO_LED, led_status=led_status?0:1);
 			}
 		}
@@ -498,13 +498,13 @@ _attribute_data_retention_	u32 device_in_connection_state = 0;
 void ble_remote_terminate(u8 e,u8 *p, int n) //*p is terminate reason
 {
 	device_in_connection_state = 0;
-	at_print((unsigned char *)"\r\n+BLE_DISCONNECTED\r\n");
+	at_print((char *)"\r\n+BLE_DISCONNECTED\r\n");
 }
 
 void ble_remote_connect(u8 e,u8 *p, int n) //*p is terminate reason
 {
 	device_in_connection_state = 1;//
-	at_print((unsigned char *)"\r\n+BLE_CONNECTED\r\n");
+	at_print((char *)"\r\n+BLE_CONNECTED\r\n");
 	mesh_ble_connect_cb(e,p,n);
 }
 

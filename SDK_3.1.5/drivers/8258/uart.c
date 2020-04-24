@@ -394,7 +394,7 @@ volatile unsigned char uart_send_byte(unsigned char byte)
  * @return    none
  */
 
-void uart_recbuff_init(unsigned char *RecvAddr, unsigned short RecvBufLen, unsigned char *txAddr)
+void uart_recbuff_init(unsigned short *RecvAddr, unsigned short RecvBufLen, unsigned char *txAddr)
 {
     unsigned char bufLen;
     unsigned int addr;

@@ -1346,6 +1346,7 @@ void rf_link_light_event_callback (u8 status)
 
 	if(status == LGT_CMD_SET_MESH_INFO){
         //cfg_led_event(LED_EVENT_PROVISION_SUCCESS);
+		extern void at_print(char * data);
 		at_print("\r\n+STATE:1\r\n");
     }else if(status == LGT_CMD_SET_SUBSCRIPTION){
         //cfg_led_event(LED_EVENT_FLASH_1HZ_3S);

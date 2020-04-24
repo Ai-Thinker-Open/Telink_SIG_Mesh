@@ -251,7 +251,7 @@ extern volatile unsigned char uart_send_byte(unsigned char byte);
  * @return    none
  */
 
-extern void uart_recbuff_init(unsigned char *RecvAddr, unsigned short RecvBufLen, unsigned char *txAddr);
+extern void uart_recbuff_init(unsigned short *RecvAddr, unsigned short RecvBufLen, unsigned char *txAddr);
 
 
 
