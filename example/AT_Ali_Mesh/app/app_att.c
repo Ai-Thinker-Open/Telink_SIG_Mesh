@@ -256,12 +256,21 @@ u8	 	  my_userdefine_dat 		= 0x00;
 const u8  my_userderdefine[4] = {'U', 'S', 'E','R'};
 const u8  my_userdefine_UUID[16]= TELINK_USERDEFINE_UUID;
 
+static u8 my_userdefine_DataCCC[2]  				= {0};
+
+char buff[64] = {0};
 int set_ccc_diaptch(void *p)
 {
 	rf_packet_att_data_t *pw = (rf_packet_att_data_t *)p;
-	provision_Out_ccc[0] = pw->dat[0];
-	provision_Out_ccc[1] = pw->dat[1];
-	beacon_send.conn_beacon_flag =1;
+	// provision_Out_ccc[0] = pw->dat[0];
+	// provision_Out_ccc[1] = pw->dat[1];
+	// beacon_send.conn_beacon_flag =1;
+
+	u8 len = pw->l2cap - 3;
+	u_sprintf(buff, "\r\n+APP:%d,", len);
+	at_print(buff);
+	at_send((char*)pw->dat, len);
+	at_print("\r\n");
 	return 1;
 }
 #endif
@@ -453,7 +462,7 @@ int online_st_att_write(void *pw)
 #define MAX_SERVICE_GATT_OTA            (4)
 #define MAX_SERVICE_PROVISION           (9)
 #define MAX_SERVICE_PROXY               (9)
-#define MAX_USER_DEFINE_SET_CCC_ATT_NUM (USER_DEFINE_SET_CCC_ENABLE ? 4 : 0)
+#define MAX_USER_DEFINE_SET_CCC_ATT_NUM (USER_DEFINE_SET_CCC_ENABLE ? 5 : 0)
 #define MAX_MI_ATT_NUM                  (MI_API_ENABLE ? 20 : 0)
 #define MAX_SERVICE_CHANGE_ATT_NUM      (5)
 #define MAX_AIS_ATT_NUM 	            (AIS_ENABLE ? 12 : 0)
@@ -477,7 +486,7 @@ int online_st_att_write(void *pw)
 /*const */u8 GATT_PROXY_HANDLE = (ATT_NUM_START_PROXY + 2);  // slave
 const u8 SERVICE_CHANGE_ATT_HANDLE_SLAVE = (ATT_NUM_START_SERVICE_CHANGE + 2);
 const u8 ONLINE_ST_ATT_HANDLE_SLAVE = (ATT_NUM_START_ONLINE_ST + 2);
-
+const u8 USER_DEFINE_ATT_HANDLE = ATT_NUM_START_USER_DEFINE_SET_CCC + 2;
 
 #define MY_ATTRIBUTE_BASE0           \
     {ATTRIBUTE_TOTAL_NUM,0,0,0,0,0}, /* total num of attribute*/   \
@@ -529,6 +538,7 @@ const u8 ONLINE_ST_ATT_HANDLE_SLAVE = (ATT_NUM_START_ONLINE_ST + 2);
 	{MAX_USER_DEFINE_SET_CCC_ATT_NUM,&att_perm_auth_read, 2,16,(u8*)(&my_primaryServiceUUID), 	(u8*)(&my_userdefine_service_UUID), 0},\
 	{0,&att_perm_auth_read, 2, 1,(u8*)(&my_characterUUID),		(u8*)(&my_userdefine_prop), 0}, /*prop*/   \
 	{0,&att_perm_auth_rdwd,16,sizeof(my_userdefine_dat),(u8*)(&my_userdefine_UUID), (&my_userdefine_dat), &set_ccc_diaptch, 0}, /*value*/   \
+	{0,&att_perm_auth_rdwd, 2, 2, (u8*)(&clientCharacterCfgUUID),     (u8*)(my_userdefine_DataCCC), 0}, /*value*/   \
 	{0,&att_perm_auth_read, 2,sizeof (my_userderdefine),(u8*)(&userdesc_UUID), (u8*)(my_userderdefine), 0},
 #endif
 
@@ -621,6 +631,7 @@ const attribute_t my_Attributes[] = {
 #if (ONLINE_STATUS_EN)
     MY_ATTRIBUTE_ONLINE_STATUS
 #endif      
+
 };
 
 void my_att_init(u8 mode)

@@ -494,6 +494,19 @@ void test_ecdsa_sig_verify2()
 }
 #endif
 
+_attribute_data_retention_	u32 device_in_connection_state = 0;
+void ble_remote_terminate(u8 e,u8 *p, int n) //*p is terminate reason
+{
+	device_in_connection_state = 0;
+	at_print((unsigned char *)"\r\n+BLE_DISCONNECTED\r\n");
+}
+
+void ble_remote_connect(u8 e,u8 *p, int n) //*p is terminate reason
+{
+	device_in_connection_state = 1;//
+	at_print((unsigned char *)"\r\n+BLE_CONNECTED\r\n");
+	mesh_ble_connect_cb(e,p,n);
+}
 
 void user_init()
 {
@@ -598,7 +611,8 @@ void user_init()
 	adc_drv_init();
 	#endif
 	rf_pa_init();
-	bls_app_registerEventCallback (BLT_EV_FLAG_CONNECT, (blt_event_callback_t)&mesh_ble_connect_cb);
+	bls_app_registerEventCallback (BLT_EV_FLAG_CONNECT, (blt_event_callback_t)&ble_remote_connect);
+	bls_app_registerEventCallback (BLT_EV_FLAG_TERMINATE, &ble_remote_terminate);
 	blc_hci_registerControllerEventHandler(app_event_handler);		//register event callback
 	//bls_hci_mod_setEventMask_cmd(0xffff);			//enable all 15 events,event list see ble_ll.h
 	bls_set_advertise_prepare (app_advertise_prepare_handler);

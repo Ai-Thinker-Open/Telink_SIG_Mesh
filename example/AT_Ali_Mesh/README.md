@@ -21,8 +21,9 @@
 |AT+NETNAME|查询NetKey       |
 |AT+PASWORD|查询AppKey       |
 |AT+ADDR   |查询模块地址
-|AT+SEND   |
-|+DATA:    |收到数据
+|AT+SEND2APP|发送数据到用户手机APP   |
+|+DATA:    |收到天猫精灵数据
+|+APP:     |收到用户手机APP发来的数据
 
 ## 语音控制指令
 与天猫精灵成功连接后可使用语音进行控制，常用指令如下：

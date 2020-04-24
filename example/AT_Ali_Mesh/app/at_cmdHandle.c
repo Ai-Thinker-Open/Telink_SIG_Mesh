@@ -265,6 +265,26 @@ static unsigned char atCmd_Send(char *pbuf,  int mode, int lenth)
 	return 0;
 }
 
+extern const u8 USER_DEFINE_ATT_HANDLE ;
+extern u32 device_in_connection_state;//连接状态
+//AT+SEND2APP=5,12345
+static unsigned char atCmd_Send2App(char *pbuf,  int mode, int lenth)
+{
+	if(device_in_connection_state == 0) return 2;
+
+	char * tmp = strstr(pbuf,",");
+    if(tmp == NULL)
+    {
+        return AT_RESULT_CODE_ERROR;
+    }
+
+	tmp[0] = 0; tmp++;
+
+	u16 data_len = STR2U16(pbuf); //获取数据长度
+
+	bls_att_pushNotifyData(USER_DEFINE_ATT_HANDLE, tmp, data_len); //release
+	return 0;
+}
 static unsigned char atCmd_Addr(char *pbuf,  int mode, int lenth)
 {
 	char buf[64] = {0};
@@ -287,7 +307,8 @@ _at_command_t gAtCmdTb_writeRead[] =
 { 
 	{ "NETNAME", 	atCmd_Netname,	"Set/Read NetName\r\n"},
 	{ "PASWORD", 	atCmd_Pasword,	"Set/Read Password\r\n"},
-	{ "SEND", 		atCmd_Send,	"Send data to other module\r\n"},	
+	{ "MESHSEND", 	atCmd_Send,	"Send data to other module\r\n"},	
+	{ "SEND2APP", 	atCmd_Send2App,	"Send data to other module\r\n"},	
 	{ "ADDR", 		atCmd_Addr,	"Set/Read module address\r\n"},	
 	{0, 	0,	0}
 };
