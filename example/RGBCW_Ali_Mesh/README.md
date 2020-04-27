@@ -52,9 +52,11 @@
 
 
 在```/mesh/light.c```文件中将
+
     light_dim_set_hw(idx, 0, get_pwm_cmp(0xff,(100-ct_100)*lum_100/100));
     light_dim_set_hw(idx, 1, get_pwm_cmp(0xff, ct_100*lum_100/100));
 修改为：
+
     light_dim_set_hw(idx, 4, get_pwm_cmp(0xff,(100-ct_100)*lum_100/100));
     light_dim_set_hw(idx, 3, get_pwm_cmp(0xff, ct_100*lum_100/100));
 
