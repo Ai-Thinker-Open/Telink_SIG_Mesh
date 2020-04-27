@@ -197,25 +197,28 @@ extern "C" {
 #define XIAOMI_TEST_CODE_ENABLE 	0
 
 //---------------  LED / PWM
-#define PWM_R       GPIO_PB4		//red
-#define PWM_G       GPIO_PB5		//green
-#define PWM_B       GPIO_PWM3B0		//blue
-#define PWM_W       GPIO_PWM4B1		//white
-
+#define PWM_R       GPIO_PC3		//red
+#define PWM_G       GPIO_PC4		//green
+#define PWM_B       GPIO_PC2		//blue
+#define PWM_C       GPIO_PB5		//cool white
+#define PWM_W       GPIO_PB4		//warm white
 
 #define PWM_FUNC_R  AS_PWM  // AS_PWM_SECOND
 #define PWM_FUNC_G  AS_PWM  // AS_PWM_SECOND
 #define PWM_FUNC_B  AS_PWM  // AS_PWM_SECOND
+#define PWM_FUNC_C  AS_PWM  // AS_PWM_SECOND
 #define PWM_FUNC_W  AS_PWM  // AS_PWM_SECOND
 
 #define PWMID_R     (GET_PWMID(PWM_R, PWM_FUNC_R))
 #define PWMID_G     (GET_PWMID(PWM_G, PWM_FUNC_G))
 #define PWMID_B     (GET_PWMID(PWM_B, PWM_FUNC_B))
+#define PWMID_C     (GET_PWMID(PWM_C, PWM_FUNC_C))
 #define PWMID_W     (GET_PWMID(PWM_W, PWM_FUNC_W))
                     
 #define PWM_INV_R   (GET_PWM_INVERT_VAL(PWM_R, PWM_FUNC_R))
 #define PWM_INV_G   (GET_PWM_INVERT_VAL(PWM_G, PWM_FUNC_G))
 #define PWM_INV_B   (GET_PWM_INVERT_VAL(PWM_B, PWM_FUNC_B))
+#define PWM_INV_C   (GET_PWM_INVERT_VAL(PWM_C, PWM_FUNC_C))
 #define PWM_INV_W   (GET_PWM_INVERT_VAL(PWM_W, PWM_FUNC_W))
 
 #define GPIO_LED	PWM_R

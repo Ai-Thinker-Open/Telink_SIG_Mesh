@@ -74,12 +74,13 @@ u8 ct_flag = 0; // always HSL
 #define RES_HW_PWM_R    {PWM_R, PWMID_R, PWM_INV_R, PWM_FUNC_R}
 #define RES_HW_PWM_G    {PWM_G, PWMID_G, PWM_INV_G, PWM_FUNC_G}
 #define RES_HW_PWM_B    {PWM_B, PWMID_B, PWM_INV_B, PWM_FUNC_B}
+#define RES_HW_PWM_C    {PWM_C, PWMID_C, PWM_INV_C, PWM_FUNC_C}
 #define RES_HW_PWM_W    {PWM_W, PWMID_W, PWM_INV_W, PWM_FUNC_W}
 #endif
 
 #if (LIGHT_TYPE_SEL == LIGHT_TYPE_CT_HSL)
-const light_res_hw_t light_res_hw[LIGHT_CNT][4] = {
-	/*[0] = */{RES_HW_PWM_R, RES_HW_PWM_G, RES_HW_PWM_B, RES_HW_PWM_W}, // vc can't use "[0]="
+const light_res_hw_t light_res_hw[LIGHT_CNT][5] = {
+	/*[0] = */{RES_HW_PWM_R, RES_HW_PWM_G, RES_HW_PWM_B, RES_HW_PWM_C, RES_HW_PWM_W}, // vc can't use "[0]="
 };
 #elif (LIGHT_TYPE_SEL == LIGHT_TYPE_HSL || LIGHT_TYPE_SEL == LIGHT_TYPE_XYL)
 const light_res_hw_t light_res_hw[LIGHT_CNT][3] = {
@@ -584,8 +585,8 @@ void light_dim_refresh(int idx) // idx: index of LIGHT_CNT.
     light_dim_set_hw(idx, 2, get_pwm_cmp(0xff, (100-mi_ct)*lum_100/100));
             #else
     if(ct_flag){
-        light_dim_set_hw(idx, 0, get_pwm_cmp(0xff,(100-ct_100)*lum_100/100));
-        light_dim_set_hw(idx, 1, get_pwm_cmp(0xff, ct_100*lum_100/100)); 
+        light_dim_set_hw(idx, 4, get_pwm_cmp(0xff,(100-ct_100)*lum_100/100));
+        light_dim_set_hw(idx, 3, get_pwm_cmp(0xff, ct_100*lum_100/100)); 
     }
             #endif   
         #endif

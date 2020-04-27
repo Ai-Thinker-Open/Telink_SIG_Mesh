@@ -266,7 +266,7 @@ extern "C" {
 #define LIGHT_TYPE_SEL				LIGHT_TYPE_PANEL
 		#endif
 	#else
-#define LIGHT_TYPE_SEL				LIGHT_TYPE_CT	// 
+#define LIGHT_TYPE_SEL				LIGHT_TYPE_CT_HSL	// 
 	#endif
 #endif
 

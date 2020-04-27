@@ -356,6 +356,11 @@ int cb_vd_msg_attr_set(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
     case ALI_VD_MD_TIME_ATTR_TYPE_CYCLE_TIMING_DEL:
     	return ali_mesh_timing_del(par, par_len, cb_par);
 #endif
+	case 0x0123:
+		p_set->attr_par[6] = p_set-> tid;
+		p_set->attr_par[7] = 10;
+		p_set->attr_par[8] = 0;
+		return mesh_cmd_sig_light_hsl_set(p_set->attr_par, 9, cb_par);
     }
 #endif
     return err;
