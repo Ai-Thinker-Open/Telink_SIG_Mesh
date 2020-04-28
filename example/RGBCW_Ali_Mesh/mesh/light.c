@@ -145,9 +145,102 @@ const u16 rgb_lumen_map[101] = {
     214*256,218*256,222*256,226*256,230*256,235*256,240*256,245*256,250*256,255*256,// must less or equal than (255*256)
 };
 
+#if (LIGHT_TYPE_HSL_EN)
+typedef struct{
+    float h;
+    float s;
+    float l;
+}HSL_set;
+
+typedef struct{
+    u8 r;
+    u8 g;
+    u8 b;
+}RGB_set;
+
+float Hue_2_RGB(float v1,float v2,float vH){
+    if(vH < 0){
+        vH+=1;
+    }
+    if(vH > 1){
+        vH-=1;
+    }
+    if((6.0*vH)<1){
+        return (v1+(v2-v1)*6.0f*vH);
+    }
+    if((2.0*vH)<1){
+        return (v2);
+    }
+    if((3.0*vH)<2){
+        return (v1+(v2-v1)*((2.0f/3.0f)-vH)*6.0f);
+    } 
+    return(v1);
+}
+
+void HslToRgb(HSL_set hsl, RGB_set *rgb)
+{
+	float m1,m2;
+	if(hsl.s==0){	
+	    rgb->r=rgb->g=rgb->b=(u8)(hsl.l*255);
+	}
+	else
+	{
+	    if(hsl.l<0.5){
+		    m2=hsl.l*(1+hsl.s);
+	    }
+	    else{
+		    m2=hsl.l+hsl.s-hsl.l*hsl.s;   	
+	    }
+	    m1=2*hsl.l-m2;
+	    rgb->r=(u8)(255*Hue_2_RGB(m1,m2,hsl.h+(1.0f/3.0f)));
+	    rgb->g=(u8)(255*Hue_2_RGB(m1,m2,hsl.h));
+	    rgb->b=(u8)(255*Hue_2_RGB(m1,m2,hsl.h-(1.0f/3.0f)));
+	}	
+}
+#endif 
+
+u8 mode_sw_data[4] ={ 0 }; //切换冷暖与颜色时的中间数据
+
 void set_ct_mode(u8 mode)
 {
+	st_transition_t *p_trans = P_ST_TRANS(0, ST_TRANS_LIGHTNESS);
+
     if(ct_flag != mode){
+
+		LOG_MSG_INFO(TL_LOG_MESH,0,0,"switch mode %d .....................", ct_flag);
+
+		if(ct_flag == 1) //当前为 CT Mode
+		{
+			u8 lum_100 = level2lum(p_trans->present); //获取亮度
+			u8 ct_100 = 0;
+
+			if(ct_flag && (lum_100 != 0))
+			{
+				u16 temp = light_ctl_temp_prensent_get(0);
+				ct_100 = temp_to_temp100_hw(temp);
+			}
+			mode_sw_data[0] = 1;
+			mode_sw_data[1] = (100-ct_100)*lum_100/100;
+			mode_sw_data[2] = ct_100*lum_100/100;
+		}
+		else
+		{
+			st_transition_t *p_hue = P_ST_TRANS(0, ST_TRANS_HSL_HUE);
+			st_transition_t *p_sat = P_ST_TRANS(0, ST_TRANS_HSL_SAT);
+			HSL_set HSL;
+			RGB_set RGB;
+			HSL.h = ((float)(s16_to_u16(p_hue->present))/65535.0f);
+			HSL.s = ((float)(s16_to_u16(p_sat->present))/65535.0f);
+			HSL.l = ((float)(s16_to_u16(p_trans->present))/65535.0f);
+			HslToRgb(HSL,&RGB);
+			mode_sw_data[0] = 2;
+			mode_sw_data[1] = RGB.r*100/255;
+			mode_sw_data[2] = RGB.g*100/255;
+			mode_sw_data[3] = RGB.b*100/255;
+		}
+
+		p_trans ->present = -32768;
+
 	    ct_flag = mode;
 	    mesh_misc_store();
 	}
@@ -440,60 +533,6 @@ void light_dim_set_hw(int idx, int idx2, u16 val)
     }
 }
 
-#if (LIGHT_TYPE_HSL_EN)
-typedef struct{
-    float h;
-    float s;
-    float l;
-}HSL_set;
-
-typedef struct{
-    u8 r;
-    u8 g;
-    u8 b;
-}RGB_set;
-
-float Hue_2_RGB(float v1,float v2,float vH){
-    if(vH < 0){
-        vH+=1;
-    }
-    if(vH > 1){
-        vH-=1;
-    }
-    if((6.0*vH)<1){
-        return (v1+(v2-v1)*6.0f*vH);
-    }
-    if((2.0*vH)<1){
-        return (v2);
-    }
-    if((3.0*vH)<2){
-        return (v1+(v2-v1)*((2.0f/3.0f)-vH)*6.0f);
-    } 
-    return(v1);
-}
-
-void HslToRgb(HSL_set hsl, RGB_set *rgb)
-{
-	float m1,m2;
-	if(hsl.s==0){	
-	    rgb->r=rgb->g=rgb->b=(u8)(hsl.l*255);
-	}
-	else
-	{
-	    if(hsl.l<0.5){
-		    m2=hsl.l*(1+hsl.s);
-	    }
-	    else{
-		    m2=hsl.l+hsl.s-hsl.l*hsl.s;   	
-	    }
-	    m1=2*hsl.l-m2;
-	    rgb->r=(u8)(255*Hue_2_RGB(m1,m2,hsl.h+(1.0f/3.0f)));
-	    rgb->g=(u8)(255*Hue_2_RGB(m1,m2,hsl.h));
-	    rgb->b=(u8)(255*Hue_2_RGB(m1,m2,hsl.h-(1.0f/3.0f)));
-	}	
-}
-#endif 
-
 #if MD_SERVER_EN
 void light_res_sw_g_level_last_set(int idx, int st_trans_type)
 {
@@ -587,6 +626,25 @@ void light_dim_refresh(int idx) // idx: index of LIGHT_CNT.
     if(ct_flag){
         light_dim_set_hw(idx, 4, get_pwm_cmp(0xff,(100-ct_100)*lum_100/100));
         light_dim_set_hw(idx, 3, get_pwm_cmp(0xff, ct_100*lum_100/100)); 
+
+		if(mode_sw_data[0] == 2) //渐变关闭RGB灯
+		{ 
+			if(mode_sw_data[1] > 1) mode_sw_data[1] -= 2;
+			if(mode_sw_data[2] > 1) mode_sw_data[2] -= 2;
+			if(mode_sw_data[3] > 1) mode_sw_data[3] -= 2;
+
+			if((mode_sw_data[1] < 2) && (mode_sw_data[2] < 2) && (mode_sw_data[3] < 2)) 
+			{
+				mode_sw_data[0] = 0;
+				mode_sw_data[1] = 0;
+				mode_sw_data[2] = 0;
+				mode_sw_data[3] = 0;
+			}
+
+			light_dim_set_hw(idx, 0, get_pwm_cmp(0xff, mode_sw_data[1]));
+			light_dim_set_hw(idx, 1, get_pwm_cmp(0xff, mode_sw_data[2])); 
+			light_dim_set_hw(idx, 2, get_pwm_cmp(0xff, mode_sw_data[3]));
+		}
     }
             #endif   
         #endif
@@ -612,6 +670,22 @@ void light_dim_refresh(int idx) // idx: index of LIGHT_CNT.
         //A_1[A_1_cnt++] = (clock_time()-tick_1)/32;
         //}
         //irq_restore(r);
+
+		if(mode_sw_data[0] == 1) //渐变关闭冷暖灯
+		{
+			if(mode_sw_data[1] > 1) mode_sw_data[1] -= 2;
+			if(mode_sw_data[2] > 1) mode_sw_data[2] -= 2;
+
+			if((mode_sw_data[1] < 2) && (mode_sw_data[2] < 2)) 
+			{
+				mode_sw_data[0] = 0;
+				mode_sw_data[1] = 0;
+				mode_sw_data[2] = 0;
+			}
+
+			light_dim_set_hw(idx, 4, get_pwm_cmp(0xff, mode_sw_data[1]));
+			light_dim_set_hw(idx, 3, get_pwm_cmp(0xff, mode_sw_data[2])); 
+		}
     }
 	    #endif
     #endif
