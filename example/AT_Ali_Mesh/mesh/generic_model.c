@@ -56,6 +56,7 @@
 model_g_onoff_level_t	model_sig_g_onoff_level;
 model_g_power_onoff_trans_time_t   model_sig_g_power_onoff;
 u32 mesh_md_g_power_onoff_addr = FLASH_ADR_MD_G_POWER_ONOFF;	// share with default transition time model
+int mesh_cmd_at_data(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par);
 
 #if (1)
 #if MD_SERVER_EN
@@ -241,6 +242,7 @@ u8 lc_onoff_flag = 0;   // comfirm later
  */
 int mesh_cmd_sig_g_onoff_set(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 {
+	mesh_cmd_at_data(par, par_len, cb_par);
 	int err = 0;
 #if MESH_RX_TEST
 	if(par_len>sizeof(mesh_cmd_g_onoff_set_t)){
@@ -397,6 +399,7 @@ int mesh_cmd_sig_g_level_get(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
  */
 int mesh_cmd_sig_g_level_set(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 {
+	mesh_cmd_at_data(par, par_len, cb_par);
 #if MESH_RX_TEST
 	memset(&mesh_rcv_cmd, 0x00, sizeof(mesh_rcv_cmd));
 	memset(&mesh_rcv_ack, 0x00, sizeof(mesh_rcv_ack));
@@ -455,6 +458,7 @@ int mesh_cmd_sig_def_trans_time_get(u8 *par, int par_len, mesh_cb_fun_par_t *cb_
 
 int mesh_cmd_sig_def_trans_time_set(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 {
+	mesh_cmd_at_data(par, par_len, cb_par);
 	int err = -1;
     trans_time_t *val_new = (trans_time_t *)par;
     trans_time_t *p_trans = &model_sig_g_power_onoff.trans_time[cb_par->model_idx];
@@ -503,6 +507,7 @@ int mesh_cmd_sig_g_on_powerup_get(u8 *par, int par_len, mesh_cb_fun_par_t *cb_pa
 
 int mesh_cmd_sig_g_on_powerup_set(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 {
+	mesh_cmd_at_data(par, par_len, cb_par);
     u8 val_new = par[0];
     u8 *p_on_powerup = &model_sig_g_power_onoff.on_powerup[cb_par->model_idx];
     if( val_new < G_ON_POWERUP_MAX){
@@ -541,6 +546,7 @@ int mesh_cmd_sig_g_power_get(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 
 int mesh_cmd_sig_g_power_set(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 {
+	mesh_cmd_at_data(par, par_len, cb_par);
 	return mesh_cmd_sig_lightness_set(par, par_len, cb_par);
 }
 
@@ -558,6 +564,7 @@ int mesh_cmd_sig_g_power_def_get(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par
 
 int mesh_cmd_sig_g_power_def_set(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 {
+	mesh_cmd_at_data(par, par_len, cb_par);
 	return mesh_cmd_sig_lightness_def_set(par, par_len, cb_par);
 }
 
@@ -852,8 +859,6 @@ int mesh_cmd_sig_vendor_model_sub_list(u8 *par, int par_len, mesh_cb_fun_par_t *
 #define mesh_cmd_sig_vendor_model_sub_list          (0)
 #endif
 
-int mesh_cmd_at_data(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par);
-
 const mesh_cmd_sig_func_t mesh_cmd_sig_func[] = {
 	// OP_TYPE_SIG1
     {APPKEY_ADD, 0, SIG_MD_CFG_CLIENT, SIG_MD_CFG_SERVER, mesh_cmd_sig_cfg_appkey_set, APPKEY_STATUS},
@@ -978,10 +983,10 @@ const mesh_cmd_sig_func_t mesh_cmd_sig_func[] = {
     {REMOTE_PROV_PDU_REPORT,1,SIG_MD_REMOTE_PROV_SERVER,SIG_MD_REMOTE_PROV_CLIENT,mesh_cmd_sig_rp_pdu_report,STATUS_NONE},
 #endif
     // generic
-    {G_ONOFF_GET, 0, SIG_MD_G_ONOFF_C, SIG_MD_G_ONOFF_S, mesh_cmd_at_data/*mesh_cmd_sig_g_onoff_get*/, G_ONOFF_STATUS},
-    {G_ONOFF_SET, 0, SIG_MD_G_ONOFF_C, SIG_MD_G_ONOFF_S,  mesh_cmd_at_data/*mesh_cmd_sig_g_onoff_set*/, G_ONOFF_STATUS},
-    {G_ONOFF_SET_NOACK, 0, SIG_MD_G_ONOFF_C, SIG_MD_G_ONOFF_S,  mesh_cmd_at_data/*mesh_cmd_sig_g_onoff_set*/, STATUS_NONE},
-    {G_ONOFF_STATUS, 1, SIG_MD_G_ONOFF_S, SIG_MD_G_ONOFF_C,  mesh_cmd_at_data/*mesh_cmd_sig_g_onoff_status*/, STATUS_NONE},
+    {G_ONOFF_GET, 0, SIG_MD_G_ONOFF_C, SIG_MD_G_ONOFF_S, mesh_cmd_sig_g_onoff_get, G_ONOFF_STATUS},
+    {G_ONOFF_SET, 0, SIG_MD_G_ONOFF_C, SIG_MD_G_ONOFF_S,  mesh_cmd_sig_g_onoff_set, G_ONOFF_STATUS},
+    {G_ONOFF_SET_NOACK, 0, SIG_MD_G_ONOFF_C, SIG_MD_G_ONOFF_S,  mesh_cmd_sig_g_onoff_set, STATUS_NONE},
+    {G_ONOFF_STATUS, 1, SIG_MD_G_ONOFF_S, SIG_MD_G_ONOFF_C,  mesh_cmd_sig_g_onoff_status, STATUS_NONE},
 
 	// battery server
 #if MD_BATTERY_EN

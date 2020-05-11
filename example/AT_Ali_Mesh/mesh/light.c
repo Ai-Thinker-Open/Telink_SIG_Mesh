@@ -293,16 +293,16 @@ void light_pwm_init()
     
     foreach(i, LIGHT_CNT){
     	foreach_arr(k,light_res_hw[0]){
-			u16 level_def = 0;	// PWM_MAX_TICK;	 //
-			const light_res_hw_t *p_hw = &light_res_hw[i][k];
-	        pwm_set(p_hw->id, PWM_MAX_TICK, p_hw->invert ? (PWM_MAX_TICK - level_def) : level_def);
-	        // light_dim_refresh(i);
-	        pwm_start(p_hw->id);
-	        #if((MCU_CORE_TYPE==MCU_CORE_8258) || (MCU_CORE_TYPE==MCU_CORE_8278))
-	        gpio_set_func(p_hw->gpio, p_hw->func);
-	        #else
-	        gpio_set_func(p_hw->gpio, AS_PWM);
-	        #endif
+			// u16 level_def = 0;	// PWM_MAX_TICK;	 //
+			// const light_res_hw_t *p_hw = &light_res_hw[i][k];
+	        // pwm_set(p_hw->id, PWM_MAX_TICK, p_hw->invert ? (PWM_MAX_TICK - level_def) : level_def);
+	        // // light_dim_refresh(i);
+	        // pwm_start(p_hw->id);
+	        // #if((MCU_CORE_TYPE==MCU_CORE_8258) || (MCU_CORE_TYPE==MCU_CORE_8278))
+	        // gpio_set_func(p_hw->gpio, p_hw->func);
+	        // #else
+	        // gpio_set_func(p_hw->gpio, AS_PWM);
+	        // #endif
         }
         
         int onoff_present = light_g_onoff_present_get(i);
@@ -392,14 +392,14 @@ u32 get_pwm_cmp(u8 val, u8 lum){
  */
 void light_dim_set_hw(int idx, int idx2, u16 val)
 {
-    if((idx < ARRAY_SIZE(light_res_hw)) && (idx2 < ARRAY_SIZE(light_res_hw[0]))){
-		const light_res_hw_t *p_hw = &light_res_hw[idx][idx2];
-		// #if FEATURE_LOWPOWER_EN
-		led_onoff_gpio(p_hw->gpio, 0 != val);
-		// #else
-        // pwm_set_lum(p_hw->id, val, p_hw->invert);
-        // #endif
-    }
+    // if((idx < ARRAY_SIZE(light_res_hw)) && (idx2 < ARRAY_SIZE(light_res_hw[0]))){
+	// 	const light_res_hw_t *p_hw = &light_res_hw[idx][idx2];
+	// 	// #if FEATURE_LOWPOWER_EN
+	// 	led_onoff_gpio(p_hw->gpio, 0 != val);
+	// 	// #else
+    //     // pwm_set_lum(p_hw->id, val, p_hw->invert);
+    //     // #endif
+    // }
 }
 
 #if (LIGHT_TYPE_HSL_EN)

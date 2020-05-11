@@ -121,6 +121,8 @@ int is_light_ctl_set_op(u16 op)
 	return ((op == LIGHT_CTL_SET) || (op == LIGHT_CTL_SET_NOACK));
 }
 
+int mesh_cmd_at_data(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par);
+
 #if MD_SERVER_EN
 #if WIN32
 void VC_RefreshUI_level(mesh_cb_fun_par_t *cb_par)
@@ -573,6 +575,7 @@ int lightness_set(mesh_cmd_lightness_set_t *p_set, int par_len, u16 op, int idx,
  */
 int mesh_cmd_sig_lightness_set(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 {
+	mesh_cmd_at_data(par, par_len, cb_par);
 	int err = 0;
     st_pub_list_t pub_list = {{0}};
 	err = lightness_set((mesh_cmd_lightness_set_t *)par, par_len, cb_par->op, cb_par->model_idx, cb_par->retransaction, &pub_list);
@@ -881,6 +884,7 @@ int light_ctl_temp_set(mesh_cmd_light_ctl_set_t *p_set, int par_len, u16 op, int
  */
 int mesh_cmd_sig_light_ctl_set(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 {
+	mesh_cmd_at_data(par, par_len, cb_par);
 	set_ct_mode(1);
 	int err = 0;
 	mesh_cmd_light_ctl_set_t *p_set = (mesh_cmd_light_ctl_set_t *)par;
@@ -1114,6 +1118,7 @@ int mesh_cmd_sig_light_ctl_temp_get(u8 *par, int par_len, mesh_cb_fun_par_t *cb_
  */
 int mesh_cmd_sig_light_ctl_temp_set(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 {
+	mesh_cmd_at_data(par, par_len, cb_par);
 	set_ct_mode(1);
 	int err = 0;
     st_pub_list_t pub_list = {{0}};

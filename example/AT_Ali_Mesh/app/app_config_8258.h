@@ -203,10 +203,10 @@ extern "C" {
 #define SWITCH_ENABLE_1 0 //按键优先电平
 
 //---------------  LED / PWM
-#define PWM_R       GPIO_PB4		//继电器GPIO
-#define PWM_G       GPIO_PB5		//green
-#define PWM_B       GPIO_PWM3B0		//blue
-#define PWM_W       GPIO_PWM4B1		//white
+#define PWM_R       GPIO_PC3		//red
+#define PWM_G       GPIO_PC4		//green
+#define PWM_B       GPIO_PC2		//blue
+#define PWM_W       GPIO_PB5		//white
 
 
 #define PWM_FUNC_R  AS_PWM  // AS_PWM_SECOND
