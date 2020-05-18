@@ -65,16 +65,17 @@ u8 ct_flag = 1; // default CT
 u8 ct_flag = 0; // always HSL
 #endif
 
+#define PWM_FUNC_R  AS_GPIO  // AS_PWM_SECOND
+#define PWMID_R     (GET_PWMID(RELAY_GPIO, PWM_FUNC_R))
+#define PWM_INV_R   (GET_PWM_INVERT_VAL(RELAY_GPIO, PWM_FUNC_R))
+
 #if (IS_VC_PROJECT)
 #define RES_HW_PWM_R    {0, 2, 0, 0}
 #define RES_HW_PWM_G    {0, 1, 0, 0}
 #define RES_HW_PWM_B    {0, 3, 0, 0}
 #define RES_HW_PWM_W    {0, 4, 0, 0}
 #else
-#define RES_HW_PWM_R    {PWM_R, PWMID_R, PWM_INV_R, PWM_FUNC_R}
-#define RES_HW_PWM_G    {PWM_G, PWMID_G, PWM_INV_G, PWM_FUNC_G}
-#define RES_HW_PWM_B    {PWM_B, PWMID_B, PWM_INV_B, PWM_FUNC_B}
-#define RES_HW_PWM_W    {PWM_W, PWMID_W, PWM_INV_W, PWM_FUNC_W}
+#define RES_HW_PWM_R    {RELAY_GPIO, PWMID_R, PWM_INV_R, PWM_FUNC_R}
 #endif
 
 #if (LIGHT_TYPE_SEL == LIGHT_TYPE_CT_HSL)
@@ -110,7 +111,7 @@ const light_res_hw_t light_res_hw[LIGHT_CNT][1] = {
 };
 #endif
 
-const u32 GPIO_LED_INDEX = (GPIO_LED == PWM_R) ? 0 : ((GPIO_LED == PWM_G) ? 1 : ((GPIO_LED == PWM_B) ? 2 : ((GPIO_LED == PWM_W) ? 3 : 0)));
+//const u32 GPIO_LED_INDEX = (GPIO_LED == PWM_R) ? 0 : ((GPIO_LED == PWM_G) ? 1 : ((GPIO_LED == PWM_B) ? 2 : ((GPIO_LED == PWM_W) ? 3 : 0)));
 
 #define LIGHT_ADJUST_INTERVAL       (20)   // unit :ms;     min:20ms; max 100ms
 

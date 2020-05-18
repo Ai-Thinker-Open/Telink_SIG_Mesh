@@ -86,12 +86,6 @@ extern "C" {
 #define UART_RX_PIN		UART_RX_PB0
 #endif
 
-#define HCI_LOG_FW_EN   1
-#if HCI_LOG_FW_EN
-#define DEBUG_INFO_TX_PIN           		GPIO_PB1
-#define PRINT_DEBUG_INFO                    1
-#endif
-
 #define ADC_ENABLE		0
 #if ADC_ENABLE
 #define ADC_CHNM_ANA_INPUT 		AVSS
@@ -163,68 +157,26 @@ extern "C" {
 #define SLEEP_FUNCTION_DISABLE          1
 #endif
 
-//---------------  Button 
-#if (PCBA_8258_SEL == PCBA_8258_DONGLE_48PIN)
-#define PULL_WAKEUP_SRC_PD6     PM_PIN_PULLUP_1M	//btn
-#define PULL_WAKEUP_SRC_PD5     PM_PIN_PULLUP_1M	//btn
-#define PD6_INPUT_ENABLE		1
-#define PD5_INPUT_ENABLE		1
-#define	SW1_GPIO				GPIO_PD6
-#define	SW2_GPIO				GPIO_PD5
-#elif(PCBA_8258_SEL == PCBA_8258_C1T139A30_V1_2)
-#define PULL_WAKEUP_SRC_PB2     PM_PIN_PULLUP_1M	//btn
-#define PULL_WAKEUP_SRC_PB3     PM_PIN_PULLUP_1M	//btn
-#define PB2_INPUT_ENABLE		1
-#define PB3_INPUT_ENABLE		1
-#define	SW1_GPIO				GPIO_PB2            // SW2 in board
-#define	SW2_GPIO				GPIO_PB3            // SW4 in board
-
-#if 1 // must output 0, because it is keyboard array. pull down is not enough to output low level.
-#define PB4_FUNC                AS_GPIO
-#define PB4_OUTPUT_ENABLE       1
-#define PB4_DATA_OUT            0
-#endif
-#else   // PCBA_8258_C1T139A30_V1_0
-#define PULL_WAKEUP_SRC_PD2     PM_PIN_PULLUP_1M	//btn
-#define PULL_WAKEUP_SRC_PD1     PM_PIN_PULLUP_1M	//btn
-#define PD2_INPUT_ENABLE		1
-#define PD1_INPUT_ENABLE		1
-#define	SW1_GPIO				GPIO_PD2
-#define	SW2_GPIO				GPIO_PD1
-#endif
-
 #define XIAOMI_MODULE_ENABLE	MI_API_ENABLE
 #define XIAOMI_TEST_CODE_ENABLE 	0
 
-#define GPIO_LED	GPIO_PC3
+/************************关于插座的引脚配置****************************/
+#define GPIO_LED	GPIO_PB4   //指示灯LED
 
-#define BTN_GPIO GPIO_PD2 //按键GPIO
-#define FACTORY_RESTORE  3 //长按恢复出厂设置时间
-#define SWITCH_ENABLE_1 0 //按键优先电平
+#define BTN_GPIO GPIO_PD2  //按键GPIO
+#define FACTORY_RESTORE  3 //长按恢复出厂设置时间(单位为秒)
+#define SWITCH_ENABLE_1 0  //按键有效电平
 
-//---------------  LED / PWM
-#define PWM_R       GPIO_PB4		//冷光
-#define PWM_G       GPIO_PB5		//暖管
-#define PWM_B       GPIO_PWM3B0		//blue
-#define PWM_W       GPIO_PWM4B1		//white
+#define RELAY_GPIO       GPIO_PB5		//继电器控制引脚
 
+//是否打开log打印
+#define HCI_LOG_FW_EN   1
+#if HCI_LOG_FW_EN
+#define DEBUG_INFO_TX_PIN           		GPIO_PB1 //log输出引脚
+#define PRINT_DEBUG_INFO                    1
+#endif
 
-#define PWM_FUNC_R  AS_PWM  // AS_PWM_SECOND
-#define PWM_FUNC_G  AS_PWM  // AS_PWM_SECOND
-#define PWM_FUNC_B  AS_PWM  // AS_PWM_SECOND
-#define PWM_FUNC_W  AS_PWM  // AS_PWM_SECOND
-
-#define PWMID_R     (GET_PWMID(PWM_R, PWM_FUNC_R))
-#define PWMID_G     (GET_PWMID(PWM_G, PWM_FUNC_G))
-#define PWMID_B     (GET_PWMID(PWM_B, PWM_FUNC_B))
-#define PWMID_W     (GET_PWMID(PWM_W, PWM_FUNC_W))
-                    
-#define PWM_INV_R   (GET_PWM_INVERT_VAL(PWM_R, PWM_FUNC_R))
-#define PWM_INV_G   (GET_PWM_INVERT_VAL(PWM_G, PWM_FUNC_G))
-#define PWM_INV_B   (GET_PWM_INVERT_VAL(PWM_B, PWM_FUNC_B))
-#define PWM_INV_W   (GET_PWM_INVERT_VAL(PWM_W, PWM_FUNC_W))
-
-
+/**********************************end***********************************/
 /////////////open SWS digital pullup to prevent MCU err, this is must ////////////
 #define PA7_DATA_OUT			1
 

@@ -47,7 +47,7 @@
 //u8 fri_request_retry_max = FRI_REQ_RETRY_MAX;
 u8 lpn_deep_retention_en = PM_DEEPSLEEP_RETENTION_ENABLE;
 u8 mesh_lpn_rx_master_key = 0;
-const u32 mesh_lpn_key_map[] = {SW1_GPIO, SW2_GPIO};
+//const u32 mesh_lpn_key_map[] = {SW1_GPIO, SW2_GPIO};
 #define	MESH_LPN_CMD_KEY		(SW2_GPIO)
 u32 mesh_lpn_wakeup_key = 0;
 u8 key_not_release = 0;
