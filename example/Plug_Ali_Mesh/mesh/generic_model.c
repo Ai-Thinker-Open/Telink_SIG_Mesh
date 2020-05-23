@@ -105,8 +105,10 @@ int mesh_tx_cmd_g_onoff_st(u8 idx, u16 ele_adr, u16 dst_adr, u8 *uuid, model_com
 {
     mesh_cmd_g_onoff_st_t rsp = {0};
     mesh_g_onoff_st_rsp_par_fill(&rsp, idx);
+    rsp.present_onoff = rsp.target_onoff;
     u32 len = sizeof(rsp);
-	if(0 == rsp.remain_t){
+	//if(0 == rsp.remain_t)
+	{
 		len -= 2;
 	}
 #if MESH_RX_TEST

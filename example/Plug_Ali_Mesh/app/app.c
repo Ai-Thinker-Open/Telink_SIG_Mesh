@@ -320,8 +320,11 @@ void proc_ui()
 			set->transit_t = 10;
 			set->delay = 10;
 			mesh_tx_cmd2self_primary(buf, sizeof(buf));
-		}
 
+			present_status = present_status?0:1;
+
+			mesh_tx_cmd2normal_primary(0x0482, &present_status, 1, 0xffff, 0);//上报状态
+		}
 		else if (press_time > LONG_PRESS_TIME)
 		{
 			my_printf_uart("factory\r\n");
