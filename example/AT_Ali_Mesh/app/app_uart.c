@@ -130,9 +130,8 @@ void at_print_hexstr(char * data, u32 len)
 	unsigned char buf[128] = { 0 };
 	for(int i =0; i < len; i ++)
 	{
-		buf[i*3] = hextab[(data[i] >> 4)];
-		buf[i*3 +1] = hextab[(data[i]&0xf)];
-		buf[i*3 +2] = ' ';
+		buf[i*2] = hextab[(data[i] >> 4)];
+		buf[i*2 +1] = hextab[(data[i]&0xf)];
 	}
 	at_print((char*)buf);
 }

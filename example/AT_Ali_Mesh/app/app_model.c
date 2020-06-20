@@ -30,7 +30,7 @@ int mesh_cmd_at_data(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
     {
         return 0;
     }
-	u_sprintf(buf, "\r\n+DATA:%04X,%02X%02X,%d,",cb_par->adr_src,(cb_par->op)&0xff,(cb_par->op)>>8,par_len);
+	u_sprintf(buf, "\r\n+DATA:%02X%02X,%d,",(cb_par->op)&0xff,(cb_par->op)>>8,par_len);
     at_print(buf);
     at_print_hexstr((char*)par,par_len);
     at_print("\r\n");

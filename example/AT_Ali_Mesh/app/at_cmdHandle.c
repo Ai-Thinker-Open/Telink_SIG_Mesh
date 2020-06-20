@@ -145,100 +145,8 @@ static unsigned char atCmd_State(char *pbuf,  int mode, int lenth)
 	return 0;
 }
 
-#include "mesh/mesh_node.h"
-extern mesh_key_t mesh_key;  // not init here to decrease firmware size.
-//mesh_key_t mesh_key;
-static unsigned char atCmd_Netname(char *pbuf,  int mode, int lenth)
-{
-	if(mode == AT_CMD_MODE_SET) //设置netKey
-    {
-        uint8_t key[16] = { 0 };
-
-        if(lenth >15)
-        {
-            return 1;
-        }
-
-        memcpy(key,pbuf,lenth);
-
-		memcpy(mesh_key.net_key[0][0].key,key,16);
-
-		mesh_key.net_key[0][0].index = 0;
-		mesh_key.net_key[0][0].valid = 1;
-
-		mesh_key_save();
-        return 0;
-    }
-
-	char buf[64] = {0};
-	u_sprintf(buf,"+NETNAME:%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X\r\n",
-	mesh_key.net_key[0][0].key[0],
-	mesh_key.net_key[0][0].key[1],
-	mesh_key.net_key[0][0].key[2],
-	mesh_key.net_key[0][0].key[3],
-	mesh_key.net_key[0][0].key[4],
-	mesh_key.net_key[0][0].key[5],
-	mesh_key.net_key[0][0].key[6],
-	mesh_key.net_key[0][0].key[7],
-	mesh_key.net_key[0][0].key[8],
-	mesh_key.net_key[0][0].key[9],
-	mesh_key.net_key[0][0].key[10],
-	mesh_key.net_key[0][0].key[11],
-	mesh_key.net_key[0][0].key[12],
-	mesh_key.net_key[0][0].key[13],
-	mesh_key.net_key[0][0].key[14],
-	mesh_key.net_key[0][0].key[15]
-	);
-	
-	at_print(buf);
-	return 0;
-}
-
-static unsigned char atCmd_Pasword(char *pbuf,  int mode, int lenth)
-{
-	if(mode == AT_CMD_MODE_SET) //设置netKey
-    {
-        uint8_t key[16] = { 0 };
-
-        if(lenth >15)
-        {
-            return 1;
-        }
-
-        memcpy(key,pbuf,lenth);
-
-		memcpy(mesh_key.net_key[0][0].app_key[0].key,key,16);
-		mesh_key.net_key[0][0].app_key[0].index = 0;
-		mesh_key.net_key[0][0].app_key[0].valid = 1;
-
-		mesh_key_save();
-        return 0;
-    }
-
-	char buf[64] = {0};
-	u_sprintf(buf,"+PASWORD:%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X\r\n",
-	mesh_key.net_key[0][0].app_key[0].key[0],
-	mesh_key.net_key[0][0].app_key[0].key[1],
-	mesh_key.net_key[0][0].app_key[0].key[2],
-	mesh_key.net_key[0][0].app_key[0].key[3],
-	mesh_key.net_key[0][0].app_key[0].key[4],
-	mesh_key.net_key[0][0].app_key[0].key[5],
-	mesh_key.net_key[0][0].app_key[0].key[6],
-	mesh_key.net_key[0][0].app_key[0].key[7],
-	mesh_key.net_key[0][0].app_key[0].key[8],
-	mesh_key.net_key[0][0].app_key[0].key[9],
-	mesh_key.net_key[0][0].app_key[0].key[10],
-	mesh_key.net_key[0][0].app_key[0].key[11],
-	mesh_key.net_key[0][0].app_key[0].key[12],
-	mesh_key.net_key[0][0].app_key[0].key[13],
-	mesh_key.net_key[0][0].app_key[0].key[14],
-	mesh_key.net_key[0][0].app_key[0].key[15]
-	);
-	at_print(buf);
-	return 0;
-}
-
-static unsigned char atCmd_Send(char *pbuf,  int mode, int lenth)
+//AT+SEND2ALI=8421,12345678
+static unsigned char atCmd_Send2Ali(char *pbuf,  int mode, int lenth)
 {
 	char * tmp = strstr(pbuf,",");
     if(tmp == NULL)
@@ -248,20 +156,35 @@ static unsigned char atCmd_Send(char *pbuf,  int mode, int lenth)
 
 	tmp[0] = 0; tmp++;
 
-	u16 addr_dst = HEX2U16((u8*)pbuf);  //获取目的地址
+	u16 op = HEX2U16((u8*)pbuf);  //获取Op Code
+	u32 len = lenth -(tmp - pbuf);
 
-	pbuf = tmp;
+	for(int i = 0; i < len; i ++) //将16进制字符串转换成二进制数组
+	{
+		if(((tmp[i] >= '0') && (tmp[i] <= '9')) || ((tmp[i] >= 'A') && (tmp[i] <= 'F')))
+		{
+			if((tmp[i] >= '0') && (tmp[i] <= '9'))
+			{
+				tmp[i] -= '0';
+			}
+			else
+			{
+				tmp[i] -= 'A';
+				tmp[i] += 0x0A;
+			}
 
-	tmp = strstr(pbuf,",");
-    if(tmp == NULL)
-    {
-        return AT_RESULT_CODE_ERROR;
-    }
-	tmp[0] = 0; tmp++;
+			if(i%2)
+			{
+				tmp[i/2] = (tmp[i-1] << 4) | tmp[i];
+			}
+		}
+		else
+		{
+			return 2;
+		}
+	}
 
-	u16 data_len = STR2U16((u8*)pbuf); //获取数据长度
-
-	SendOpParaDebug(addr_dst,0,0x0182, (u8*)tmp,data_len);
+	mesh_tx_cmd_rsp(op, (u8 *)tmp, len/2, ele_adr_primary, 0xffff, 0, 0);
 	return 0;
 }
 
@@ -285,30 +208,11 @@ static unsigned char atCmd_Send2App(char *pbuf,  int mode, int lenth)
 	bls_att_pushNotifyData(USER_DEFINE_ATT_HANDLE, (u8*)tmp, data_len); //release
 	return 0;
 }
-static unsigned char atCmd_Addr(char *pbuf,  int mode, int lenth)
-{
-	if(mode == AT_CMD_MODE_SET) //设置netKey
-    {
-		mesh_set_ele_adr(HEX2U16((u8*)pbuf));
-        return 0;
-    }
 
-	if(mode == AT_CMD_MODE_READ)
-	{
-		char buf[64] = {0};
-		u_sprintf(buf,"+ADDR:%X", ele_adr_primary);
-		at_print(buf);
-		return 0;
-	}
-	return 1;
-}
 _at_command_t gAtCmdTb_writeRead[] =
 { 
-	{ "NETNAME", 	atCmd_Netname,	"Set/Read NetName\r\n"},
-	{ "PASWORD", 	atCmd_Pasword,	"Set/Read Password\r\n"},
-	{ "MESHSEND", 	atCmd_Send,	"Send data to other module\r\n"},	
-	{ "SEND2APP", 	atCmd_Send2App,	"Send data to other module\r\n"},	
-	{ "ADDR", 		atCmd_Addr,	"Set/Read module address\r\n"},	
+	{ "SEND2ALI", 	atCmd_Send2Ali,		"Send data to Tmall \r\n"},	
+	{ "SEND2APP", 	atCmd_Send2App,	"Send data to phone\r\n"},	
 	{0, 	0,	0}
 };
 

@@ -6,8 +6,6 @@
 
 本示例基于TB-02_Kit开发板，使用PB1与PB7作为串口引脚，默认波特率为115200。
 
-短按按钮可改变继电器的状态(即开关插座)，长按按键(直到指示灯快速闪烁)，松开后将会恢复出厂设置，同时指示灯慢闪数次。
-
 ## AT指令
 
 |   指令   |       功能      |      备注     |
@@ -18,9 +16,7 @@
 |AT+RESTORE|恢复出厂设置
 |AT+STATE  |查询配网状态
 |AT+SLEEP  |深度睡眠         |暂未实现|
-|AT+NETNAME|查询NetKey       |
-|AT+PASWORD|查询AppKey       |
-|AT+ADDR   |查询模块地址
+|AT+SEND2ALI|发送数据到天猫精灵音箱  |
 |AT+SEND2APP|发送数据到用户手机APP   |
 |+DATA:    |收到天猫精灵数据
 |+APP:     |收到用户手机APP发来的数据
@@ -53,58 +49,42 @@
 |11159|5ae11e6b81593cf0848bbaffeabbdd91|f8a76393a436
 |11159|1c02ec81e70a03928cf77c40df3d7169|f8a76393a437
 
-## 更改记录
+## 指令使用示例
 
-本工程是在远程SDK上修改来的，主要修改如下：
+正确烧录固件与三元组后，复位模组，使用天猫精灵音箱找队友，与模组配对成功后，模组将通过串口输出：
 
-在```/app/app.c```中，添加了user_gpio_init函数，修改了process_ui函数，实现按键长短按功能。
+    +STATE:1
 
-在main_loop函数中，注释factory_reset_cnt_check();函数，关闭通过上电次数恢复出厂的功能。
+配对成功后和通过天猫精灵控制模块，模块收到天猫精灵的控制指令后会通过串口将指令发出来，具体格式如下：
 
-在```/mesh/light.c```文件中，修改set_on_power_up_onoff函数中的light_par_save(0)为light_par_save(1)，立即保存开关状态。
+    +DATA:<OpCode>,<长度>,<参数>
 
-修改 set_on_power_up_last 函数，实现断电记忆功能
+数据示例如下：
 
-修改 light_par_save_proc 函数，实现未配网也要保存开关状态数据
+- 关灯 ```+DATA:8202,4,00714100```
 
-修改 light_dim_set_hw 函数，只保留开关功能
+- 开灯```+DATA:8202,4,01724100```
 
-修改  light_g_level_set_idx_with_trans 函数，将渐变时间强制设为20ms
+- 将灯的亮度调为80 ```+DATA:824C,5,CCCC734100```
 
-修改 proc_led 函数，改变指示灯GPIO
+- 将灯的色温调整为 ```+DATA:825E,9,CCCCA0190000744100```
 
-在```/mesh/mesh_config.h```文件中，将宏定义LIGHT_TYPE_SEL设为LIGHT_TYPE_NONE，灯的类型修改为None
+- 将灯的颜色调整为红色 ```+DATA:D100,9,C2230100800000FFFF```
 
-将宏定义ALI_MD_TIME_EN设为1，打开阿里天猫精灵定时功能。
+- 将灯调整为阅读模式 ```+DATA:8242,5,0300750000```
 
-在 ```app/app_config_8258.h```中打开了调试功能，使之GPIO为PB6，波特率500000
+- 将风扇调整为三挡 ```+DATA:D100,4,220A0103```
 
-在```mesh/mesh_common.c```文件中，修改 tl_log_msg 函数，强制输出调试信息
+- 将风扇调整静音模式 ```+DATA:D100,5,4504F01100```
 
-在```mesh/generic_model```文件中，将G_ONOFF_GET 回调修改为 mesh_cmd_at_data
+- 打开风扇的摇头功能 ```+DATA:D100,4,A3000501```
 
-在```mesh/vendor_model.c```文件中，将一些opcode回调函数更改为 mesh_cmd_at_data
-## 用户其他可修改项
+具体的数据值需要自己来解析！
 
-用户可根据自己的需求在这个Demo上修改，实现自己想要的功能：
+用户手动操作了设备，可主动将当前设备状态上报给天猫精灵，具体数据格式如下：
 
-### 修改按键，指示灯及继电器控制引脚
+    AT+SEND2ALI=<OpCode>,<参数>
 
-这些引脚可在app/app_config_8258.h文件中通过宏定义指定，客户可自行查看此文件修改之。
+指令示例如下：
 
-默认定义如下：
-
-    #define BTN_GPIO GPIO_PD2 //按键GPIO
-    #define FACTORY_RESTORE  3 //长按恢复出厂设置时间
-    #define SWITCH_ENABLE_1 0 //按键优先电平
-
-    #define PWM_R       GPIO_PB4		//继电器GPIO
-
-### 修改按键长按时间
-修改上述宏定义即可。
-
-### 修改配网成功指示灯闪烁次数
-在```mesh/light.h  ```中，修改宏定义 LED_EVENT_PROVISION_SUCCESS 可修改配网成功指示灯灯闪次数及频率
-
-### 修改出厂设置指示灯闪烁次数
-在```mesh/light.h  ```中，修改宏定义 LED_EVENT_FACTORY_SUCCESS 可修改恢复出厂设置后指示灯灯闪次数及频率
+- 关灯 ```AT+SEND2ALI=0482,010100```
