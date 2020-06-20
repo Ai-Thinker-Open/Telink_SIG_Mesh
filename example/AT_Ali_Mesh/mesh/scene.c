@@ -204,8 +204,11 @@ u8 mesh_cmd_sig_scene_set_ll(u16 scene_id, mesh_cb_fun_par_t *cb_par)
     return st;
 }
 
+int mesh_cmd_at_data(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par);
 int mesh_cmd_sig_scene_set(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 {
+	mesh_cmd_at_data(par, par_len, cb_par);
+
 	int err = 0;
     u16 scene_id = par[0] + (par[1]<<8);
     if(SCENE_ID_INVALID == scene_id){
@@ -229,7 +232,7 @@ void mesh_scene_st_rsp_par_fill(scene_status_t *rsp, u8 idx)
 	rsp->remain_t = level_st.remain_t;  // because ST_TRANS_LIGHTNESS is  forced to transmiting, when scene recall.
 }
 
-int mesh_tx_cmd_scene_st(u8 idx, u16 ele_adr, u16 dst_adr, u8 st, u8 *uuid, model_common_t *pub_md)
+int mesh_tx_cmd_scene_st(u8 idx, u16 ele_adr, u16 dst_adr, u8 st, u8 *uuid, model_common_t *pub_md, u16 my_id)
 {
 	scene_status_t rsp = {0};
 	rsp.st = st;
@@ -244,6 +247,12 @@ int mesh_tx_cmd_scene_st(u8 idx, u16 ele_adr, u16 dst_adr, u8 st, u8 *uuid, mode
 		}
 	}
 	rsp.current_id = p_scene->current_scene;
+
+	if(my_id != 0)
+	{
+		rsp.st = 0;
+		rsp.current_id = my_id;
+	}
 	return mesh_tx_cmd_rsp(SCENE_STATUS, (u8 *)&rsp, len, ele_adr, dst_adr, uuid, pub_md);
 }
 
@@ -256,22 +265,24 @@ int mesh_scene_st_publish(u8 idx)
 		return -1;
 	}
 	u8 *uuid = get_virtual_adr_uuid(pub_adr, p_com_md);
-	return mesh_tx_cmd_scene_st(idx, ele_adr, pub_adr, SCENE_ST_SUCCESS, uuid, p_com_md);
+	return mesh_tx_cmd_scene_st(idx, ele_adr, pub_adr, SCENE_ST_SUCCESS, uuid, p_com_md, 0);
 }
 
-int mesh_scene_st_rsp(mesh_cb_fun_par_t *cb_par, u8 st)
+int mesh_scene_st_rsp(mesh_cb_fun_par_t *cb_par, u8 st, u16 my_id)
 {
 	model_g_light_s_t *p_model = (model_g_light_s_t *)cb_par->model;
-	return mesh_tx_cmd_scene_st(cb_par->model_idx, p_model->com.ele_adr, cb_par->adr_src, st, 0, 0);
+	return mesh_tx_cmd_scene_st(cb_par->model_idx, p_model->com.ele_adr, cb_par->adr_src, st, 0, 0, my_id);
 }
 
 int mesh_cmd_sig_scene_get(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 {
-	return mesh_scene_st_rsp(cb_par, SCENE_ST_SUCCESS);
+	return mesh_scene_st_rsp(cb_par, SCENE_ST_SUCCESS, 0);
 }
 
 int mesh_cmd_sig_scene_recall(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 {
+	mesh_cmd_at_data(par, par_len, cb_par);
+
 	int err = 0;
 	u8 st = SCENE_ST_NOT_FOUND;
 	scene_recall_t *p_recall = (scene_recall_t *)par;
@@ -370,7 +381,7 @@ int mesh_cmd_sig_scene_recall(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 	}
     
 	if(cb_par->op_rsp != STATUS_NONE){
-		err = mesh_scene_st_rsp(cb_par, st);
+		err = mesh_scene_st_rsp(cb_par, st, p_recall->id);
 	}
 	
     return err;
