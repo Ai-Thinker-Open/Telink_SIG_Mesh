@@ -440,6 +440,8 @@ int mesh_tx_cmd_lightness_st(u8 idx, u16 ele_adr, u16 dst_adr, u16 op_rsp, u8 *u
 	mesh_cmd_lightness_st_t rsp = {0};
 	mesh_level_u16_st_rsp_par_fill(&rsp, idx, ST_TRANS_LIGHTNESS);
 
+	rsp.present =rsp.target;
+
 #if CMD_LINEAR_EN	 				 
 	if(LIGHTNESS_LINEAR_STATUS == op_rsp){
 		if(is_linear_flag(idx)){
@@ -757,6 +759,9 @@ int mesh_tx_cmd_light_ctl_st(u8 idx, u16 ele_adr, u16 dst_adr, u8 *uuid, model_c
 {
 	mesh_cmd_light_ctl_st_t rsp = {0};
 	mesh_light_ctl_st_rsp_par_fill(&rsp, idx);
+
+	rsp.present_lightness = rsp.target_lightness;
+	rsp.present_temp = rsp.target_temp;
 	
 	u32 len = sizeof(rsp);
 	if(0 == rsp.remain_t){
@@ -1059,7 +1064,10 @@ int mesh_tx_cmd_light_ctl_temp_st(u8 idx, u16 ele_adr, u16 dst_adr, u8 *uuid, mo
 {
 	mesh_cmd_light_ctl_temp_st_t rsp = {0};
 	mesh_light_ctl_temp_st_rsp_par_fill(&rsp, idx);
-	
+
+	rsp.present_temp = rsp.target_temp;
+	rsp.present_delta_uv = rsp.target_delta_uv;
+
 	u32 len = sizeof(rsp);
 	if(0 == rsp.remain_t){
 		len -= 5;

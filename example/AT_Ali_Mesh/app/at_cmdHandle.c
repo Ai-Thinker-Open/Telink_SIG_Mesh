@@ -12,7 +12,7 @@
 
 #include "stack/ble/ble.h"
 
-#define AT_VERSION "0.1"
+#define AT_VERSION "0.2"
 
 #define STORAGE_NAME 1
 #define STORAGE_BAUD 2

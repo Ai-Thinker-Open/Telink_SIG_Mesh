@@ -264,7 +264,7 @@ u8 get_attr_para_len(u16 attr_type)
 }
 
 u8 is_rsp_cmd_tid = 0;
-int vd_msg_tx_attr_st(u8 idx, u16 ele_adr, u16 dst_adr, u8 *uuid, model_common_t *pub_md, u8 *par)
+int vd_msg_tx_attr_st(u8 idx, u16 ele_adr, u16 dst_adr, u8 *uuid, model_common_t *pub_md, u8 *par, int par_len)
 {
 	u8 ret = -1;
 	vd_msg_attr_sts_t rsp;
@@ -278,21 +278,24 @@ int vd_msg_tx_attr_st(u8 idx, u16 ele_adr, u16 dst_adr, u8 *uuid, model_common_t
 		memcpy(rsp.attr_par, vd_msg_attr[attr_index].attr_par, attr_len);
 	}
 	else{
-		attr_len = 1;
-		rsp.attr_type = ATTR_ERR_CODE;
-		rsp.err_code = ATTR_NOT_SUPPORT;
+		// attr_len = 1;
+		// rsp.attr_type = ATTR_ERR_CODE;
+		// rsp.err_code = ATTR_NOT_SUPPORT;
+		attr_len = par_len - 3;
+		memcpy(rsp.attr_par, p_attr->attr_par, par_len - 3);
 	}
+
 	is_rsp_cmd_tid = 1;
     ret = mesh_tx_cmd_rsp(VD_MSG_ATTR_STS, (u8 *)&rsp, OFFSETOF(vd_msg_attr_sts_t, attr_par)+attr_len, ele_adr, dst_adr, uuid, pub_md);
 	is_rsp_cmd_tid = 0;
 	return ret;
 }
 
-int vd_msg_attr_st_rsp(mesh_cb_fun_par_t *cb_par, u8 *par)
+int vd_msg_attr_st_rsp(mesh_cb_fun_par_t *cb_par, u8 *par, int par_len)
 {
     model_g_light_s_t *p_model = (model_g_light_s_t *)cb_par->model;
 	
-    return vd_msg_tx_attr_st(cb_par->model_idx, p_model->com.ele_adr, cb_par->adr_src, 0, 0, par);
+    return vd_msg_tx_attr_st(cb_par->model_idx, p_model->com.ele_adr, cb_par->adr_src, 0, 0, par, par_len);
 }
 
 int cb_vd_msg_attr_get(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
@@ -310,7 +313,7 @@ int cb_vd_msg_attr_get(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 		return ali_mesh_timing_get(par, par_len, cb_par);
 #endif
 	}
-    return vd_msg_attr_st_rsp(cb_par, par);
+    return vd_msg_attr_st_rsp(cb_par, par, par_len);
 }
 
 int cb_vd_msg_attr_set(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
@@ -360,6 +363,12 @@ int cb_vd_msg_attr_set(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par)
 #endif
 	extern int mesh_cmd_at_data(u8 *par, int par_len, mesh_cb_fun_par_t *cb_par);
 	mesh_cmd_at_data(par, par_len, cb_par);
+
+    if(VD_MSG_ATTR_SET_NACK != cb_par->op){
+        err = vd_msg_attr_st_rsp(cb_par, par, par_len);
+    }else{
+        err = 0;
+    }
     return err;
 }
 
@@ -722,12 +731,12 @@ mesh_cmd_sig_func_t mesh_cmd_vd_func[] = {
     #endif
     
     #if SPIRIT_VENDOR_EN
-	{VD_MSG_ATTR_GET, 0, VENDOR_MD_LIGHT_C, VENDOR_MD_LIGHT_S, mesh_cmd_at_data/*cb_vd_msg_attr_get*/, VD_MSG_ATTR_STS},
+	{VD_MSG_ATTR_GET, 0, VENDOR_MD_LIGHT_C, VENDOR_MD_LIGHT_S, cb_vd_msg_attr_get, VD_MSG_ATTR_STS},
 	{VD_MSG_ATTR_SET, 0, VENDOR_MD_LIGHT_C, VENDOR_MD_LIGHT_S, cb_vd_msg_attr_set, VD_MSG_ATTR_STS},
-	{VD_MSG_ATTR_SET_NACK, 0, VENDOR_MD_LIGHT_C, VENDOR_MD_LIGHT_S, mesh_cmd_at_data/*cb_vd_msg_attr_set*/, STATUS_NONE},
-    {VD_MSG_ATTR_STS, 1, VENDOR_MD_LIGHT_S, VENDOR_MD_LIGHT_C, mesh_cmd_at_data/*cb_vd_msg_attr_status*/, STATUS_NONE},
-    {VD_MSG_ATTR_INDICA, 0, VENDOR_MD_LIGHT_S, VENDOR_MD_LIGHT_C, mesh_cmd_at_data/*cb_vd_msg_attr_indication*/, VD_MSG_ATTR_CONFIRM},
-    {VD_MSG_ATTR_CONFIRM, 1, VENDOR_MD_LIGHT_C, VENDOR_MD_LIGHT_S, mesh_cmd_at_data/*cb_vd_msg_attr_confirm*/, STATUS_NONE},
+	{VD_MSG_ATTR_SET_NACK, 0, VENDOR_MD_LIGHT_C, VENDOR_MD_LIGHT_S, cb_vd_msg_attr_set, STATUS_NONE},
+    {VD_MSG_ATTR_STS, 1, VENDOR_MD_LIGHT_S, VENDOR_MD_LIGHT_C, cb_vd_msg_attr_status, STATUS_NONE},
+    {VD_MSG_ATTR_INDICA, 0, VENDOR_MD_LIGHT_S, VENDOR_MD_LIGHT_C, cb_vd_msg_attr_indication, VD_MSG_ATTR_CONFIRM},
+    {VD_MSG_ATTR_CONFIRM, 1, VENDOR_MD_LIGHT_C, VENDOR_MD_LIGHT_S, cb_vd_msg_attr_confirm, STATUS_NONE},
 		#if ALI_MD_TIME_EN
     {VD_MSG_ATTR_UPD_TIME_REQ, 1, VENDOR_MD_LIGHT_S, VENDOR_MD_LIGHT_C, cb_vd_msg_attr_upd_time_req, STATUS_NONE},
     {VD_MSG_ATTR_UPD_TIME_RSP, 0, VENDOR_MD_LIGHT_C, VENDOR_MD_LIGHT_S, cb_vd_msg_attr_upd_time_rsp, STATUS_NONE},

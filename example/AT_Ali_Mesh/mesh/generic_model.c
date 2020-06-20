@@ -107,9 +107,10 @@ int mesh_tx_cmd_g_onoff_st(u8 idx, u16 ele_adr, u16 dst_adr, u8 *uuid, model_com
     mesh_cmd_g_onoff_st_t rsp = {0};
     mesh_g_onoff_st_rsp_par_fill(&rsp, idx);
     u32 len = sizeof(rsp);
-	if(0 == rsp.remain_t){
-		len -= 2;
-	}
+	rsp.present_onoff = rsp.target_onoff;
+	// if(0 == rsp.remain_t){
+	// 	len -= 2;
+	// }
 #if MESH_RX_TEST
 	u8 par[8];
 	memcpy(par, &rsp, sizeof(mesh_cmd_g_onoff_st_t));
@@ -1264,6 +1265,8 @@ get model id, call back function, status command flag
 int mesh_search_model_id_by_op(mesh_op_resource_t *op_res, u16 op, u8 tx_flag)
 {
     memset(op_res, 0, sizeof(mesh_op_resource_t));
+
+	LOG_MSG_INFO(TL_LOG_COMMON,0, 0,"Recv op:%X..........",op);
     
     u8 op_type = GET_OP_TYPE(op);
     if(OP_TYPE_VENDOR == op_type){
