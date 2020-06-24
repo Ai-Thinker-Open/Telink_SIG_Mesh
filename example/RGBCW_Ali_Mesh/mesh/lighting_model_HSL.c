@@ -52,6 +52,7 @@ void mesh_light_hsl_st_rsp_par_fill(mesh_cmd_light_hsl_st_t *rsp, u8 idx, u16 op
 
 int mesh_tx_cmd_light_hsl_st(u8 idx, u16 ele_adr, u16 dst_adr, u16 op_rsp, u8 *uuid, model_common_t *pub_md)
 {
+	return 0;
 	mesh_cmd_light_hsl_st_t rsp = {0};
 	mesh_light_hsl_st_rsp_par_fill(&rsp, idx, op_rsp);
 	
