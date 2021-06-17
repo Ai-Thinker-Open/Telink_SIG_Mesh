@@ -1,0 +1,58 @@
+
+/* to tell the linker the program begin from __start label in cstartup.s, thus do not treat it as a unused symbol */
+ENTRY(__start)
+
+SECTIONS
+{
+	. = 0x0;
+        .vectors :
+        {
+        *(.vectors)
+        *(.vectors.*)	/* MUST as follows, when compile with -ffunction-sections -fdata-sections, session name may changed */
+        }
+        .ram_code :
+        {
+        *(.ram_code)
+        *(.ram_code.*)
+        }
+	. = (((. + 3) / 4)*4);
+	PROVIDE(_dstored_ = .);
+	. = . + 0x808000 ;
+        .data :
+          AT (  _dstored_ )
+         {
+	. = (((. + 3) / 4)*4);
+         PROVIDE(_start_data_ = . );
+         *(.data); 
+         *(.data.*); 
+         PROVIDE(_end_data_ = . );  
+         PROVIDE(_end_data16_ = (. - 0x808000 + 15));
+         }
+	. = . - 0x808000 ;
+	PROVIDE(_ramcode_size_ = . );
+	. = (((. + 3) / 4)*4);
+        .text :
+        {
+        *(.text)
+        *(.text.*)
+        }
+        .rodata :
+        {
+        *(.rodata)
+        *(.rodata.*)
+        }
+	PROVIDE(_bss_dstored_ = .);
+	. = . + 0x808000 ;
+        .bss :
+          AT (  _bss_dstored_ )
+        {
+	. = (((. + 3) / 4)*4);
+	PROVIDE(_start_bss_ = .);
+        *(.sbss)
+        *(.sbss.*)
+        *(.bss)
+        *(.bss.*)
+        }
+	PROVIDE(_end_bss_ = .);
+	
+}

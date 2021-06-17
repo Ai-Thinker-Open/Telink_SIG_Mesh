@@ -1,0 +1,61 @@
+
+////////////////////////////////////////////////////////////////////
+目的：
+一、质量保证
+	1, 单元测试框架
+		cunit
+	2, 系统测试框架
+		test_stub
+		可完全模拟化的硬件驱动
+	3, 系统上电自检
+	4, 编译自动化
+	5, Thorough checklist and review 
+	6, no comile and link warnings
+	7, no magic word at all
+	8，除特殊情况外， 宏不应该改变程序行为
+	9, 将易变的封装在一起
+二、开发效率
+	1, 可以在 Visual C++ 上编译调试
+	2, 高可用硬件适配层、OS 适配层
+	3, 高灵活性 io 事件系统, 模块之间完全解耦
+		libev
+	4, 高效内存分配
+		jemalloc, 			(next stage)
+	5, reduced C-Runtime, 	(next stage)
+	
+三、适用于二次开发和定制化	
+	1, 客户可定制化
+		开发的事件系统，
+		客户配置文件 (user_config.h) 和自动编译
+	2, 大部分共性的代码编译成 lib
+	3, 简明的 driver model,   event driver
+四、程序效率保证
+	1, use int rather than char
+	2, 异步 IO
+五、可移植性和维护
+	尽量少依赖工程设置(应该用代码中完成代替）	
+	使用单层目录结构，不允许设置 include 搜索路径
+	最大公共代码：
+		1, 横向层次化、和纵向模块化
+	命名规范：
+		1, 头文件、C 文件、模块名、函数开头保持一致
+		2, 头文件包含要求完备但最小化
+		3，命名除了宏外，全部用小写加下划线组成
+		4, 单词缩略表:
+	宏及自动文档生成
+		
+系统层：
+	１，使用标准协议 RF4CE, sislowpan
+		由于协议的 overhead的影响，有可能被异步IO等技术减缓，
+		使用标准协议仍然有可能传输音乐，或者音质稍差一点的音乐。
+		至少语音肯定没有问题
+
+问题：
+	GCC unused code 优化问题
+	don't assume, if yes, say it loud	
+	安全、race condition
+	头文件包含顺序
+	任何增加程序员痛苦的方法都不是好方法
+	
+ -ffunction-sections -fdata-sections
+  --gc-sections --print-gc-sections	

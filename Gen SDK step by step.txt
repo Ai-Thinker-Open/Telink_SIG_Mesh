@@ -1,0 +1,26 @@
+Method 1 :use shell script
+step :
+1 generate all libs(ex lib_8263 project..) with ecplise manually
+2 run release_sdk.sh
+3 remove not necessary projects manually in eclipse
+
+
+
+Method 2 :use python 
+
+build steps :
+1 modify ble_projects.py   ['#' to skip projects , empty line just for readable,]
+2 modify customer_projects.py ['#' to skip customer, sdk_folder: { relative projects},]
+3 open telink console and exec 'start build_release.bat'
+
+
+NOTE :
+1 ble_projects.py's MCU_CORE_82xx ,__LOAD_RAM_SIZE__, -O*,-llt826* need to correspond eclipse's setting (project -> Properties -> C/C++ Build -> settings -> Tool Settings -> TC32 CC/Assembler -> All options: )
+2 press F5 to restore eclipse , or the eclipse can not run build again
+3 py script compile waring level(could be highest) not sysn. with eclispe
+  and may have compiler errors occur, need resolve them  when encounter
+4 git version command for getting version not work yet
+5 use eclipse to remove unused libs then buildup and verify
+  eclipse->property -> C/C++ Build ->Settings->TC32 C Linker ->Libraries ->remove lt_8266_32m
+6 build_projects.py & build_sdk_projects.py & gen_sdk.py need to verify per lib and filelist
+7 make sure PATH enviroment is correct. e.g. 'find' is /bin/find instead of /system32/find.exe
